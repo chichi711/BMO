@@ -3,7 +3,7 @@ class Admin extends CI_Controller{
 
     
     public function login() {
-        $data['title'] = 'iav 管理平台登入';
+        $data['title'] = 'bmo 管理平台登入';
         return view('admin/login',$data);
     }
     public function logout(){
