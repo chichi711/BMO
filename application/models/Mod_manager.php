@@ -64,7 +64,7 @@ class Mod_manager extends CI_Model {
            return True;
         }
         if($login_page != "login"){
-            redirect(base_url('./panel/login'));
+            redirect(base_url('./admin_bmo/login'));
         }
         return FALSE;
         
