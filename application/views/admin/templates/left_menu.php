@@ -1,3 +1,4 @@
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="./admin_bmo/" class="brand-link">
@@ -12,7 +13,7 @@
           <img src="./admin_assets/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div> -->
         <div class="info">
-          <a href="javascript: void(0)" >hi! <?=$_SESSION['manager']['manager_name']?> 歡迎回來</a>
+          <a href="javascript: void(0)" >hi! <?=$_SESSION['manager_id']?> 歡迎回來</a>
         </div>
       </div>
 
@@ -23,10 +24,37 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
          
           <li class="nav-item">
-            <a href="./admin_iav/banners" class="nav-link">
+            <a href="./admin" class="nav-link">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                     首頁 Banner
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./admin/main_class" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    主分類
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./admin/sub_class" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    子分類
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="./admin/third_class" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    小分類
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>

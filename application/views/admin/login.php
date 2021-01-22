@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>iAV 管理平台</title>
+  <title>BMO 管理平台</title>
   <base href="<?= base_url() ?>">
 
   <!-- sweetalert2 -->
@@ -80,7 +80,7 @@
           }, function(data) {
             console.log(data);
             if (data.sys_code == '200') {
-              location.href = "./admin_iav/index";
+              location.href = "./admin/index";
             } else {
               swal.fire(data.sys_msg);
             }
