@@ -25,7 +25,7 @@
                         <td>{{ order.manager_name }}</td>
                         <td>{{ order.last_datetime }}</td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm" @click="open('edit',order)">編輯</button>
+                            <button type="button" class="btn btn-outline-info btn-sm" @click="open('edit',order)">編輯</button>
                             <button type="button" class="btn btn-outline-danger btn-sm" @click="remove(order.manager_id)">刪除</button>
                         </td>
                     </tr>
@@ -33,10 +33,6 @@
             </table>
         </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-            <!-- Footer -->
-        </div>
-        <!-- /.card-footer-->
     </div>
     <!-- /.card -->
 

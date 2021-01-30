@@ -51,7 +51,7 @@ class Admin extends CI_Controller{
     {
         $this->mod_manager->chk_login_status();
         $view = array(
-            'title' => '子分類',
+            'title' => '次分類',
             'path'=>'admin/class/sub'
         );
         $this->load->view('admin/templates/layout',$view);

@@ -46,7 +46,7 @@
                                 <li class="nav-item">
                                     <a href="/admin/sub_class" class="nav-link">
                                         <i class="nav-icon far fa-circle"></i>
-                                        <p>子分類</p>
+                                        <p>次分類</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">

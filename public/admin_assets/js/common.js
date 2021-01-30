@@ -118,7 +118,7 @@ var common_func = {
           // 全部欄位填寫完成
             return true;
         } else {
-          swal('請填寫提示欄位');
+          Swal.fire('請填寫提示欄位');
           return false;
         }
     }

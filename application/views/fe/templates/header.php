@@ -25,6 +25,13 @@
 	<link rel="stylesheet" type="text/css" href="./public/assets/include/rs-plugin/css/layers.css">
 	<link rel="stylesheet" type="text/css" href="./public/assets/include/rs-plugin/css/navigation.css">
 
+
+	<!-- Vue -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Qs -->
+    <script src="https://cdn.bootcss.com/qs/6.7.0/qs.min.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<!-- Document Title
 	============================================= -->
 	<title><?= $title ?></title>
