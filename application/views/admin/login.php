@@ -82,7 +82,7 @@
             if (data.sys_code == '200') {
               location.href = "./admin/index";
             } else {
-              swal.fire(data.sys_msg);
+              swal.fire('登入錯誤');
             }
           }, 'json');
       })

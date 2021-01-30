@@ -12,7 +12,7 @@ class Admin extends CI_Controller{
     {
         $this->mod_manager->chk_login_status();
         $view = array(
-            'title' => 'Banner',
+            'title' => 'BMO 系統管理後台',
             'path'=>'admin/index'
         );
         $this->load->view('admin/templates/layout',$view);
@@ -27,12 +27,12 @@ class Admin extends CI_Controller{
     }
     public function logout()
     {
+        $this->mod_manager->do_logout();
         $view = array(
             'title' => 'BMO 管理後台',
-            'path'=>'admin/logout'
+            'path'=>'admin/login'
         );
-        $this->session->remove('manager');
-        $this->load->view('admin/logout', $view);
+        $this->load->view('admin/login', $view);
     }
     /********************************
      * 
@@ -40,9 +40,41 @@ class Admin extends CI_Controller{
      */
     public function main_class()
     {
+        $this->mod_manager->chk_login_status();
         $view = array(
-            'title' => 'BMO 管理後台',
+            'title' => '主分類',
             'path'=>'admin/class/main'
+        );
+        $this->load->view('admin/templates/layout',$view);
+    }
+    public function sub_class()
+    {
+        $this->mod_manager->chk_login_status();
+        $view = array(
+            'title' => '子分類',
+            'path'=>'admin/class/sub'
+        );
+        $this->load->view('admin/templates/layout',$view);
+    }
+    public function third_class()
+    {
+        $this->mod_manager->chk_login_status();
+        $view = array(
+            'title' => '小分類',
+            'path'=>'admin/class/third'
+        );
+        $this->load->view('admin/templates/layout',$view);
+    }
+    /********************************
+     * 
+     * manager
+     */
+    public function manager_list()
+    {
+        $this->mod_manager->chk_login_status();
+        $view = array(
+            'title' => '帳號管理',
+            'path'=>'admin/manager/list'
         );
         $this->load->view('admin/templates/layout',$view);
     }

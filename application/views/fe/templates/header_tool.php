@@ -67,6 +67,12 @@
 								</div>
 							</div><!-- #top-cart end -->
 
+							<!-- Top login
+							============================================= -->
+							<div id="top-login" class="header-misc-icon">
+								<a href="#"><i class="icon-user1"></i></a>
+							</div><!-- #top-login end -->
+
 						</div>
 
 						<div id="primary-menu-trigger">

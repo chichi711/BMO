@@ -45,11 +45,10 @@ class Mod_manager extends CI_Model {
     }
     // 執行登入動作
     function do_login($manager_id){
-        // $arr = $this->get_once($manager_id);
-        // unset($arr['manager_pwd']);
-        $arr['manager_id'] = 'gogo';
+        $arr = $this->get_once($manager_id);
+        unset($arr['manager_pwd']);
         $arr['login_status'] =  TRUE;
-        // $this->db->where('manager_id',$manager_id)->update('manager_main',array('last_datetime'=>date("Y-m-d H:i:s")));
+        $this->db->where('manager_id',$manager_id)->update('manager_main',array('last_datetime'=>date("Y-m-d H:i:s")));
         $this->session->set_userdata($arr);
     }
     // 執行登出動作
