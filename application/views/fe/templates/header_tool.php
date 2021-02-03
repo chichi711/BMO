@@ -1,3 +1,19 @@
+<style>
+	@media (min-width: 992px) {
+		.mega-menu-style-2 .mega-menu-column {
+			padding: 10px 20px;
+		}
+	}
+
+	@media (min-width: 992px) {
+		.mega-menu-style-2 .sub-menu-container .menu-link {
+			padding-left: 5px;
+			padding-top: 2px;
+			padding-bottom: 2px;
+		}
+	}
+</style>
+
 <body class="stretched">
 
 	<!-- Document Wrapper
@@ -76,7 +92,11 @@
 						</div>
 
 						<div id="primary-menu-trigger">
-							<svg class="svg-trigger" viewBox="0 0 100 100"><path d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"></path><path d="m 30,50 h 40"></path><path d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"></path></svg>
+							<svg class="svg-trigger" viewBox="0 0 100 100">
+								<path d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"></path>
+								<path d="m 30,50 h 40"></path>
+								<path d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"></path>
+							</svg>
 						</div>
 
 						<!-- Primary Navigation
@@ -86,58 +106,48 @@
 							<ul class="menu-container">
 								<!-- Mega Menu
 								============================================= -->
-								<li v-for="list in menu" class="menu-item mega-menu"><a class="menu-link" :href="list.main_link"><div>{{ list.main_name }}</div></a>
+								<li v-for="list in menu" class="menu-item mega-menu"><a class="menu-link" :href="list.main_link">
+										<div>{{ list.main_name }}</div>
+									</a>
 									<div v-if="list.sublist != '' " class="mega-menu-content mega-menu-style-2">
 										<div class="container">
 											<div class="row">
-												<ul v-for="item in list.sublist" class="sub-menu-container mega-menu-column col-lg-3">
-													<li class="menu-item mega-menu-title"><a class="menu-link" :href="item.sub_link"><div>{{ item.sub_name }}</div></a>
-														<ul v-if="item.thirdlist != '' " class="sub-menu-container">
-															<li v-for="order in item.thirdlist" class="menu-item"><a class="menu-link" :href="order.third_link"><div>{{ order.third_name }}</div></a></li>
-															<li class="menu-item text-gray"><a class="menu-link" :href="item.sub_link"><div>看更多</div></a></li>
+												<ul v-for="item in list.sublist" class="sub-menu-container mega-menu-column col-lg-2">
+													<li class="menu-item mega-menu-title"><a class="menu-link" :href="item.sub_link">
+															<div>{{ item.sub_name }}</div>
+														</a>
+														<ul v-if="item.thirdlist" class="sub-menu-container">
+															<li v-for="order in item.thirdlist" class="menu-item"><a class="menu-link" :href="order.third_link">
+																	<div>{{ order.third_name }}</div>
+																</a></li>
+															<li class="menu-item text-gray"><a class="menu-link" :href="item.sub_link">
+																	<div>看更多</div>
+																</a></li>
 														</ul>
 													</li>
 												</ul>
 											</div>
 										</div>
 									</div>
-								</li><!-- .mega-menu end -->
-								<li class="menu-item mega-menu mega-menu-small"><a class="menu-link" href="#"><div>雜誌</div></a>
-									<div class="mega-menu-content mega-menu-style-2">
-										<div class="container">
-											<div class="row">
-												<ul class="sub-menu-container mega-menu-column col-lg-6">
-													<li class="menu-item mega-menu-title"><a class="menu-link" href="#"><div>Footwear</div></a>
-														<ul class="sub-menu-container">
-															<li class="menu-item"><a class="menu-link" href="#"><div>Casual Shoes</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Formal Shoes</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Sports shoes</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Flip Flops</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Slippers</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Sports Sandals</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Party Shoes</div></a></li>
-														</ul>
-													</li>
-												</ul>
-												<ul class="sub-menu-container mega-menu-column col-lg-6">
-													<li class="menu-item mega-menu-title"><a class="menu-link" href="#"><div>Clothing</div></a>
-														<ul class="sub-menu-container">
-															<li class="menu-item"><a class="menu-link" href="#"><div>Casual Shirts</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>T-Shirts</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Collared Tees</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Pants / Trousers</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Ethnic Wear</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Jeans</div></a></li>
-															<li class="menu-item"><a class="menu-link" href="#"><div>Sweamwear</div></a></li>
-														</ul>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</li><!-- .mega-menu end -->
-								<li class="menu-item"><a class="menu-link" href="#"><div>主題精選</div></a></li>
-								<li class="menu-item"><a class="menu-link" href="#"><div>線上客服</div></a></li>
+								</li>
+								<!-- .mega-menu end -->
+
+								<!-- <li v-for="list in menu" class="menu-item">
+									<a class="menu-link" href="index.html"><div>{{ list.main_name }}</div></a>
+										<ul v-if="list.sublist != '' " class="sub-menu-container">
+											<li v-for="item in list.sublist" class="menu-item">
+												<a class="menu-link" href="index-corporate.html"><div>{{ item.sub_name }}</div></a>
+												
+											</li>
+										</ul>
+								</li> -->
+
+								<li class="menu-item"><a class="menu-link" href="#">
+										<div>主題精選</div>
+									</a></li>
+								<li class="menu-item"><a class="menu-link" href="#">
+										<div>線上客服</div>
+									</a></li>
 							</ul>
 
 						</nav><!-- #primary-menu end -->
@@ -155,18 +165,18 @@
 		<script>
 			new Vue({
 				el: '#header',
-				data:{
+				data: {
 					menu: []
 				},
-				mounted(){
+				mounted() {
 					let _this = this;
 					axios({
-            		    url: '/api/menu_list',
-            		    method: 'get',
-            		    responseType: 'json',
-            		}).then(function(data) {
-            		    _this.menu = data.data.data;
-            		})
+						url: '/api/menu_list',
+						method: 'get',
+						responseType: 'json',
+					}).then(function(data) {
+						_this.menu = data.data.data;
+					})
 				}
 			})
 		</script>

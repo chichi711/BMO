@@ -1,7 +1,7 @@
 <div id="app">
     <!-- Default box -->
     <div class="card">
-        <div class="alert alert-info" role="alert">
+        <div class="alert bg-aqua text-white" role="alert">
             <strong>小提示！</strong> 上下拖移列表項目到想要的位置即可進行資料的排序。
         </div>
         <div class="card-body">

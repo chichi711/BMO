@@ -1,3 +1,12 @@
 .text-grey {
   color: #C2C7D0;
 }
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+  background-color: #1ABC9C;
+}
+.bg-aqua {
+  background-color: #1ABC9C;
+}
+.text-aqua {
+  color: #1ABC9C;
+}

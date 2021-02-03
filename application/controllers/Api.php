@@ -125,26 +125,26 @@ class Api extends CI_Controller
     function menu_list()
     {
         $main_list = $this->db->order_by('main_sort', 'asc')->get('class_main')->result_array();
-        $sub_list = $this->db->order_by('sub_sort', 'asc')->get('class_sub')->result_array();
-        $third_list = $this->db->order_by('third_sort', 'asc')->get('class_third')->result_array();
+        $sub_list = $this->db->order_by('sub_id', 'asc')->get('class_sub')->result_array();
+        $third_list = $this->db->order_by('third_id', 'asc')->get('class_third')->result_array();
 
         $datalist = $main_list;
         $i = 0;
         $j = 0;
         $k = 0;
 
-        foreach ($datalist as $k => $v) {
+        foreach ($datalist as $main_k => $main_v) {
             $datalist[$i]['sublist'] = [];
-            foreach ($sub_list as $sk => $sv) {
-                if ($v['main_id'] == $sv['main_id']) {
-                    $datalist[$i]['sublist'][$j] = $sv;
-                    foreach ($third_list as $tk => $tv) {
-                        if ($sv['sub_id'] == $tv['sub_id'] && $k < 3) {
-                            $datalist[$i]['sublist'][$j]['thirdlist'][$k] = $tv;
+            foreach ($sub_list as $sub_k => $sub_v) {
+                if ($main_v['main_id'] == $sub_v['main_id']) {
+                    $datalist[$i]['sublist'][$j] = $sub_v;
+                    foreach ($third_list as $third_k => $third_v) {
+                        if ($sub_v['sub_id'] == $third_v['sub_id'] && $k < 2) {
+                            $datalist[$i]['sublist'][$j]['thirdlist'][$k] = $third_v;
                             $k++;
                         }
                     }
-                    $j ++;
+                    $j++;
                     $k = 0;
                 }
             }
@@ -278,4 +278,50 @@ class Api extends CI_Controller
         }
         $this->api_msg->show('200');
     }
+        /*******************************
+     * 
+     * 
+     * 商品
+     * 
+     * 
+     */
+
+    function product_list()
+    {
+        $data = $this->db->order_by('main_sort', 'asc')->get('product')->result_array();
+        $this->api_msg->show('200', 'Success', $data);
+    }
+    function product_set()
+    {
+        $input = array('main_id', 'main_sort', 'main_name', 'main_link');
+        $request = array('main_name');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        if ($data['main_link'] == '') {
+            $data['main_link'] = '#';
+        }
+        $where['main_id'] = $data['main_id'];
+        $this->mod_db->insert_or_update($where, $data, 'product');
+        $this->api_msg->show('200');
+    }
+    function product_remove()
+    {
+        $getpost = array('main_id');
+        $requred = array('main_id');
+        $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
+        $where = array('main_id' => $data['main_id']);
+        $this->mod_apicheck->chk_data($where, 'product', '帳號不存在');
+        $this->db->where($where)->delete('product');
+        $this->api_msg->show('200', 'Success');
+    }
+    // 排序設定
+    function product_sort()
+    {
+        $input_data = file_get_contents('php://input');
+        $input_data = json_decode($input_data, true);
+        foreach ($input_data as $k => $v) {
+            $this->db->where('main_id', $v['main_id'])->set(array('main_sort' => $v['main_sort']))->update('product');
+        }
+        $this->api_msg->show('200');
+    }
+
 }

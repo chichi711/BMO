@@ -13,11 +13,22 @@ class FE extends CI_Controller{
         $this->load->view('fe/templates/layout',$data);
     }
 
-    public function news()
+    public function product_list()
     {
         // hub
         $data = array(
-            'title' => 'product',
+            'title' => '商品頁',
+            'path'=>'fe/product_list',
+            "active"=>'product',
+        );
+        $this->load->view('fe/templates/layout',$data);
+    }
+
+    public function product()
+    {
+        // hub
+        $data = array(
+            'title' => '商品',
             'path'=>'fe/product',
             "active"=>'product',
         );

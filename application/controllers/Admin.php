@@ -78,6 +78,20 @@ class Admin extends CI_Controller{
         );
         $this->load->view('admin/templates/layout',$view);
     }
+    /********************************
+     * 
+     * product
+     */
+    public function product_list($type = 1)
+    {
+        $this->mod_manager->chk_login_status();
+        $view = array(
+            'title' => '商品列表',
+            'path'=>'admin/product/list',
+            'main_id' => $type
+        );
+        $this->load->view('admin/templates/layout',$view);
+    }
 
 
 

@@ -265,7 +265,7 @@
 	<script src="./public/assets/js/functions.js"></script>
 
 	<!-- SLIDER REVOLUTION 5.x SCRIPTS  -->
-	<script src="./public/assets/include/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
+	<!-- <script src="./public/assets/include/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
 	<script src="./public/assets/include/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
 
 	<script src="./public/assets/include/rs-plugin/js/extensions/revolution.extension.video.min.js"></script>
@@ -275,7 +275,7 @@
 	<script src="./public/assets/include/rs-plugin/js/extensions/revolution.extension.kenburn.min.js"></script>
 	<script src="./public/assets/include/rs-plugin/js/extensions/revolution.extension.navigation.min.js"></script>
 	<script src="./public/assets/include/rs-plugin/js/extensions/revolution.extension.migration.min.js"></script>
-	<script src="./public/assets/include/rs-plugin/js/extensions/revolution.extension.parallax.min.js"></script>
+	<script src="./public/assets/include/rs-plugin/js/extensions/revolution.extension.parallax.min.js"></script> -->
 	<script src="./public/assets/js/zu.js"></script>
 
         </body>
