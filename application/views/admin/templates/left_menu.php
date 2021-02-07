@@ -50,7 +50,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="/admin/product_list" class="nav-link">
+                            <a href="/admin/product_list?mid=books" class="nav-link">
                                 <i class="nav-icon fas fa-book"></i>
                                 <p>商品管理</p>
                             </a>

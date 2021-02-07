@@ -5,20 +5,20 @@
          'chg_class', 'btn', 'btn-rounded', 'mr-2']">{{ item.menu_id }}</a>
     </div>
     <!-- Default box -->
-    <div class="card">
+    <div class="card table-responsive width-100">
 
         <div class="card-body">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>商品編號</th>
-                        <th>商品名稱</th>
-                        <th>大分類</th>
-                        <!-- <th>小分類</th> -->
-                        <th>商品主圖</th>
-                        <th>庫存量</th>
-                        <th>狀態</th>
-                        <th><button type="button" class="btn btn-success btn-sm float-right" @click="open('add')">新增</button></th>
+                        <th class="fit">商品編號</th>
+                        <th class="fit">商品名稱</th>
+                        <th class="fit">大分類</th>
+                        <!-- <th class="fit">小分類</th> -->
+                        <th class="fit">商品主圖</th>
+                        <th class="fit">庫存量</th>
+                        <th class="fit">狀態</th>
+                        <th class="fit"><button type="button" class="btn btn-success btn-sm float-right" @click="open('add')">新增</button></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,14 +26,14 @@
                         <td colspan="4" align="center">尚未建立資料</td>
                     </tr>
                     <tr v-else v-for=" (order,idx) in product">
-                        <td>{{ order.product_id }}</td>
+                        <td class="fit">{{ order.product_id }}</td>
                         <td scope="row">{{ order.product_name }}</td>
                         <td>{{ order.main_name }}</td>
                         <!-- <td>{{ order.sub_name }}</td> -->
                         <td><img :src="order.main_img" style="width:30px;" class="img_src m-1"></td>
                         <td>{{ order.stock }}</td>
                         <td>{{ order.status }}</td>
-                        <td>
+                        <td class="fit">
                             <button type="button" class="btn btn-outline-aqua btn-sm" @click="open('edit',order.product_id)">編輯</button>
                             <button type="button" class="btn btn-outline-danger btn-sm" @click="remove(order.product_id)">刪除</button>
                         </td>

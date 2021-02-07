@@ -30,8 +30,8 @@
 						<!-- Logo
 						============================================= -->
 						<div id="logo">
-							<a href="index.html" class="standard-logo" data-dark-logo="./public/assets/images/logo-dark.png"><img src="./public/assets/images/logo.png" alt="Canvas Logo"></a>
-							<a href="index.html" class="retina-logo" data-dark-logo="./public/assets/images/logo-dark@2x.png"><img src="./public/assets/images/logo@2x.png" alt="Canvas Logo"></a>
+							<a href="/index" class="standard-logo" data-dark-logo="./public/assets/images/logo-dark.png"><img src="./public/assets/images/logo.png" alt="BMO Logo"></a>
+							<a href="/index" class="retina-logo" data-dark-logo="./public/assets/images/logo-dark@2x.png"><img src="./public/assets/images/logo@2x.png" alt="BMO Logo"></a>
 						</div><!-- #logo end -->
 
 						<div class="header-misc">
@@ -113,14 +113,14 @@
 										<div class="container">
 											<div class="row">
 												<ul v-for="item in list.mainlist" class="sub-menu-container mega-menu-column col-lg-2">
-													<li class="menu-item mega-menu-title"><a class="menu-link" :href="'./' + list.menu_id + '/' + item.main_id">
+													<li class="menu-item mega-menu-title"><a class="menu-link" :href="'./' + list.menu_id + '?lid=' + item.main_id">
 															<div>{{ item.main_name }}</div>
 														</a>
 														<ul v-if="item.sublist" class="sub-menu-container">
-															<li v-for="order in item.sublist" class="menu-item"><a class="menu-link" :href="'./' + list.menu_id + '/' + item.main_id + '.' + order.sub_id">
+															<li v-for="order in item.sublist" class="menu-item"><a class="menu-link" :href="'./' + list.menu_id + '?lid=' + item.main_id + '.' + order.sub_id">
 																	<div>{{ order.sub_name }}</div>
 																</a></li>
-															<li class="menu-item text-gray"><a class="menu-link" :href="'./' + list.menu_id + '/' + item.main_id">
+															<li class="menu-item text-gray"><a class="menu-link" :href="'./' + list.menu_id + '?lid=' + item.main_id">
 																	<div>看更多</div>
 																</a></li>
 														</ul>

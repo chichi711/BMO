@@ -13,7 +13,7 @@ class FE extends CI_Controller{
         $this->load->view('fe/templates/layout',$data);
     }
 
-    public function product_list()
+    public function books()
     {
         // hub
         $data = array(
