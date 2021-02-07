@@ -4,11 +4,12 @@
 	<section id="page-title">
 
 		<div class="container clearfix">
-			<h1>Shop</h1>
+			<h1 v-text="submit.sub_name == '' ? submit.main_name : submit.sub_name "></h1>
 			<span>Start Buying your Favourite Theme</span>
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="#">Home</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Shop</li>
+				<li class="breadcrumb-item">{{ submit.menu_name }}</li>
+				<li class="breadcrumb-item">{{ submit.main_name }}</li>
+				<li v-if="submit.sub_name != ''" class="breadcrumb-item active" aria-current="page">{{ submit.sub_name }}</li>
 			</ol>
 		</div>
 
@@ -89,11 +90,11 @@
 								</div>
 							</div>
 
-							<div class="product col-md-4 col-sm-6 col-12">
+							<div v-for="item in product_list" class="product col-md-4 col-sm-6 col-12">
 								<div class="grid-inner">
 									<div class="product-image">
-										<a href="#"><img src="/public/assets/images/shop/tshirts/1.jpg" alt="Blue Round-Neck Tshirt"></a>
-										<a href="#"><img src="/public/assets/images/shop/tshirts/1-1.jpg" alt="Blue Round-Neck Tshirt"></a>
+										<a href="#"><img :src="item.main_img" alt="BMO"></a>
+										<a href="#"><img :src="item.slide_imgs" alt="BMO"></a>
 										<div class="bg-overlay">
 											<div class="bg-overlay-content align-items-end justify-content-between" data-hover-animate="fadeIn" data-hover-speed="400">
 												<a href="#" class="btn btn-dark mr-2"><i class="icon-shopping-cart"></i></a>
@@ -104,9 +105,9 @@
 									</div>
 									<div class="product-desc">
 										<div class="product-title">
-											<h3><a href="#">Blue Round-Neck Tshirt</a></h3>
+											<h3><a href="#">{{ item.product_name }}</a></h3>
 										</div>
-										<div class="product-price">$9.99</div>
+										<div class="product-price">${{ item.price }}</div>
 										<div class="product-rating">
 											<i class="icon-star3"></i>
 											<i class="icon-star3"></i>
@@ -227,9 +228,12 @@
 		el: "#app",
 		data: {
 			submit: {
-				menu_id: '',
+				menu_id: '<?= $active ?>',
+				menu_name: '',
 				main_id: '',
+				main_name: '',
 				sub_id: '',
+				sub_name: '',
 			},
 			main_list: [],
 			sub_list: [],
@@ -238,8 +242,32 @@
 		mounted() {
 			let _this = this;
 			_this.get_url();
+			axios({
+				url: '/api/get_all_class_name',
+				method: 'post',
+				responseType: 'json',
+				data: Qs.stringify(_this.submit)
+			}).then(function(data) {
+				if (data.data.sys_code == '200') {
+					_this.submit = data.data.data;
+				}
+			})
+			_this.get_product_list();
+
 		},
 		methods: {
+			get_product_list() {
+				let _this = this;
+				axios({
+					url: '/api/product_list',
+					method: 'post',
+					responseType: 'json',
+					data: Qs.stringify(_this.submit)
+				}).then(function(data) {
+					console.log(data)
+					_this.product_list = data.data.data;
+				})
+			},
 			get_url() {
 				let _this = this;
 				let searchParams = new URLSearchParams(window.location.search);
@@ -257,7 +285,7 @@
 						_this.submit.sub_id = lid[1];
 						_this.call_class_main();
 						axios({
-							url: '/api/product_info',
+							url: '/api/class_sub_list',
 							method: 'post',
 							responseType: 'json',
 							data: Qs.stringify(_this.submit)
@@ -265,7 +293,6 @@
 							_this.sub_list = data.data.data;
 						})
 						console.log(lid);
-
 					}
 				} else {
 					history.back();

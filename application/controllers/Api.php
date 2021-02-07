@@ -240,6 +240,27 @@ class Api extends CI_Controller
         }
         $this->api_msg->show('200');
     }
+    // 取得所有分類名稱
+    function get_all_class_name() {
+        $getpost = array('menu_id','main_id','sub_id');
+        $requred = array('menu_id','main_id');
+        $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
+
+        $menu = $this->config->item('menu');
+        foreach($menu as $k => $v) {
+            if($data['menu_id'] == $v['menu_id']){
+                $data['menu_name'] = $v['menu_name'];
+            }
+        }
+        $data['main_name'] = $this->db->where(array('main_id' => $data['main_id']))->get('class_main')->result_array()[0]['main_name'];
+        if($data['sub_id'] != ''){
+            $data['sub_name'] = $this->db->where(array('sub_id' => $data['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
+        }else{
+            $data['sub_name'] = '';
+        }
+
+        $this->api_msg->show('200', 'Success', $data);
+    }
     /*******************************
      * 
      * 商品
@@ -256,8 +277,8 @@ class Api extends CI_Controller
 
     function product_list()
     {
-        $input = array('menu_id');
-        $request = array('menu_id');
+        $input = array('menu_id', 'main_id', 'sub_id');
+        $request = array('menu_id', 'main_id', 'sub_id');
         $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
         $data = $this->db->where($data)->get('product')->result_array();
 
@@ -265,8 +286,9 @@ class Api extends CI_Controller
         foreach($data as $k => $v) {
             $datalist[$k] = $v;
             $datalist[$k]['main_name'] = $this->db->where(array('main_id' => $v['main_id']))->get('class_main')->result_array()[0]['main_name'];
-            // $datalist[$k]['sub_name'] = $this->db->where(array('sub_id' => $v['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
+            $datalist[$k]['sub_name'] = $this->db->where(array('sub_id' => $v['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
             $datalist[$k]['status'] = $this->config->item('product_status')[$v['status']];
+            $datalist[$k]['slide_imgs'] = explode(",",$v['slide_imgs'])[0];
         }
 
         $this->api_msg->show('200', 'Success', $datalist);

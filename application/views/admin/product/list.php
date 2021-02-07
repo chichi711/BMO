@@ -2,7 +2,7 @@
     <div class="mb-3">
         <a v-for="item in menu_list" :href="'/admin/product_list?mid=' + item.menu_id" 
         :class="[ {'btn-aqua' : item.menu_id == submit.menu_id? true:false }, {'btn-outline-aqua' : item.menu_id == submit.menu_id? false:true },
-         'chg_class', 'btn', 'btn-rounded', 'mr-2']">{{ item.menu_id }}</a>
+         'chg_class', 'btn', 'btn-rounded', 'mr-2']">{{ item.menu_name }}</a>
     </div>
     <!-- Default box -->
     <div class="card table-responsive width-100">

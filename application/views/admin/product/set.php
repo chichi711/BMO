@@ -197,7 +197,7 @@
                     }).then(function(data) {
                         console.log(data);
                         if (data.data.sys_code == '200') {
-                            location.href = '/admin/product_list';
+                            location.href = '/admin/product_list?mid=books';
                         } else {
                             Swal.fire('新增失敗');
                         }
@@ -259,6 +259,7 @@
                         })
                     }).then(function(data) {
                         _this.submit = data.data.data;
+                        _this.get_sub_class.main_id = _this.submit.main_id;
                         _this.call_sub_list();
                     })
                 } else {

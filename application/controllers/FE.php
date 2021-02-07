@@ -19,7 +19,7 @@ class FE extends CI_Controller{
         $data = array(
             'title' => '商品頁',
             'path'=>'fe/product_list',
-            "active"=>'product',
+            "active"=>'books',
         );
         $this->load->view('fe/templates/layout',$data);
     }
