@@ -38,17 +38,11 @@
                                 <li class="nav-item">
                                     <a href="/admin/main_class" class="nav-link">
                                         <i class="nav-icon far fa-circle"></i>
-                                        <p>主分類</p>
+                                        <p>大分類</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/admin/sub_class" class="nav-link">
-                                        <i class="nav-icon far fa-circle"></i>
-                                        <p>次分類</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/admin/third_class" class="nav-link">
                                         <i class="nav-icon far fa-circle"></i>
                                         <p>小分類</p>
                                     </a>
@@ -57,8 +51,14 @@
                         </li>
                         <li class="nav-item">
                             <a href="/admin/product_list" class="nav-link">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-book"></i>
                                 <p>商品管理</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/index" class="nav-link">
+                                <i class="nav-icon fas fa-shopping-cart"></i>
+                                <p>購物車管理</p>
                             </a>
                         </li>
                         <li class="nav-item">

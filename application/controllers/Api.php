@@ -124,23 +124,23 @@ class Api extends CI_Controller
      */
     function menu_list()
     {
-        $main_list = $this->db->order_by('main_sort', 'asc')->get('class_main')->result_array();
+        $menu_list = $this->config->item('menu');
+        $main_list = $this->db->order_by('main_id', 'asc')->get('class_main')->result_array();
         $sub_list = $this->db->order_by('sub_id', 'asc')->get('class_sub')->result_array();
-        $third_list = $this->db->order_by('third_id', 'asc')->get('class_third')->result_array();
 
-        $datalist = $main_list;
+        $datalist = $menu_list;
         $i = 0;
         $j = 0;
         $k = 0;
 
-        foreach ($datalist as $main_k => $main_v) {
-            $datalist[$i]['sublist'] = [];
-            foreach ($sub_list as $sub_k => $sub_v) {
-                if ($main_v['main_id'] == $sub_v['main_id']) {
-                    $datalist[$i]['sublist'][$j] = $sub_v;
-                    foreach ($third_list as $third_k => $third_v) {
-                        if ($sub_v['sub_id'] == $third_v['sub_id'] && $k < 2) {
-                            $datalist[$i]['sublist'][$j]['thirdlist'][$k] = $third_v;
+        foreach ($datalist as $menu_k => $menu_v) {
+            $datalist[$i]['mainlist'] = [];
+            foreach ($main_list as $main_k => $main_v) {
+                if ($menu_v['menu_id'] == $main_v['menu_id']) {
+                    $datalist[$i]['mainlist'][$j] = $main_v;
+                    foreach ($sub_list as $sub_k => $sub_v) {
+                        if ($main_v['main_id'] == $sub_v['main_id'] && $k < 2) {
+                            $datalist[$i]['mainlist'][$j]['sublist'][$k] = $sub_v;
                             $k++;
                         }
                     }
@@ -154,20 +154,28 @@ class Api extends CI_Controller
         $this->api_msg->show('200', '', $datalist);
     }
 
+    function menu_class_list()
+    {
+        $data = $this->config->item('menu');
+        $this->api_msg->show('200', 'Success', $data);
+    }
 
+    // 次分類
     function class_main_list()
     {
+        $menu_id = $this->input->get_post('menu_id');
+        if ($menu_id != '') {
+            $this->db->where(array('menu_id' => $menu_id));
+        }
         $data = $this->db->order_by('main_sort', 'asc')->get('class_main')->result_array();
         $this->api_msg->show('200', 'Success', $data);
     }
     function class_main_set()
     {
-        $input = array('main_id', 'main_sort', 'main_name', 'main_link');
+        $input = array('main_id', 'main_sort', 'menu_id', 'main_name');
         $request = array('main_name');
         $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
-        if ($data['main_link'] == '') {
-            $data['main_link'] = '#';
-        }
+
         $where['main_id'] = $data['main_id'];
         $this->mod_db->insert_or_update($where, $data, 'class_main');
         $this->api_msg->show('200');
@@ -178,7 +186,7 @@ class Api extends CI_Controller
         $requred = array('main_id');
         $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
         $where = array('main_id' => $data['main_id']);
-        $this->mod_apicheck->chk_data($where, 'class_main', '帳號不存在');
+        $this->mod_apicheck->chk_data($where, 'class_main', '類別不存在');
         $this->db->where($where)->delete('class_main');
         $this->api_msg->show('200', 'Success');
     }
@@ -193,7 +201,7 @@ class Api extends CI_Controller
         $this->api_msg->show('200');
     }
 
-    // 次分類
+    // 小分類
     function class_sub_list()
     {
         $main_id = $this->input->get_post('main_id');
@@ -205,12 +213,9 @@ class Api extends CI_Controller
     }
     function class_sub_set()
     {
-        $input = array('sub_id', 'sub_sort', 'main_id', 'sub_name', 'sub_link');
+        $input = array('sub_id', 'sub_sort', 'main_id', 'sub_name');
         $request = array('sub_name');
         $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
-        if ($data['sub_link'] == '') {
-            $data['sub_link'] = '#';
-        }
         $where['sub_id'] = $data['sub_id'];
         $this->mod_db->insert_or_update($where, $data, 'class_sub');
         $this->api_msg->show('200');
@@ -221,7 +226,7 @@ class Api extends CI_Controller
         $requred = array('sub_id');
         $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
         $where = array('sub_id' => $data['sub_id']);
-        $this->mod_apicheck->chk_data($where, 'class_sub', '帳號不存在');
+        $this->mod_apicheck->chk_data($where, 'class_sub', '類別不存在');
         $this->db->where($where)->delete('class_sub');
         $this->api_msg->show('200', 'Success');
     }
@@ -235,93 +240,130 @@ class Api extends CI_Controller
         }
         $this->api_msg->show('200');
     }
-
-    // 小分類
-    function class_third_list()
-    {
-        $sub_id = $this->input->get_post('sub_id');
-        if ($sub_id != '') {
-            $this->db->where(array('sub_id' => $sub_id));
-        }
-        $data = $this->db->order_by('third_sort', 'asc')->get('class_third')->result_array();
-        $this->api_msg->show('200', 'Success', $data);
-    }
-    function class_third_set()
-    {
-        $input = array('third_id', 'third_sort', 'sub_id', 'third_name', 'third_link');
-        $request = array('third_name');
-        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
-        if ($data['third_link'] == '') {
-            $data['third_link'] = '#';
-        }
-        $where['third_id'] = $data['third_id'];
-        $this->mod_db->insert_or_update($where, $data, 'class_third');
-        $this->api_msg->show('200');
-    }
-    function class_third_remove()
-    {
-        $getpost = array('third_id');
-        $requred = array('third_id');
-        $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
-        $where = array('third_id' => $data['third_id']);
-        $this->mod_apicheck->chk_data($where, 'class_third', '帳號不存在');
-        $this->db->where($where)->delete('class_third');
-        $this->api_msg->show('200', 'Success');
-    }
-    // 排序設定
-    function class_third_sort()
-    {
-        $input_data = file_get_contents('php://input');
-        $input_data = json_decode($input_data, true);
-        foreach ($input_data as $k => $v) {
-            $this->db->where('third_id', $v['third_id'])->set(array('third_sort' => $v['third_sort']))->update('class_third');
-        }
-        $this->api_msg->show('200');
-    }
-        /*******************************
-     * 
+    /*******************************
      * 
      * 商品
      * 
-     * 
+     * author : 作者
+     * publisher : 出版社
+     * publication_date : 出版日期
      */
+    function product_status_configs()
+    {
+        $data = $this->config->item('product_status');
+        $this->api_msg->show('200', 'Success', $data);
+    }
 
     function product_list()
     {
-        $data = $this->db->order_by('main_sort', 'asc')->get('product')->result_array();
+        $input = array('menu_id');
+        $request = array('menu_id');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        $data = $this->db->where($data)->get('product')->result_array();
+
+        $datalist = [];
+        foreach($data as $k => $v) {
+            $datalist[$k] = $v;
+            $datalist[$k]['main_name'] = $this->db->where(array('main_id' => $v['main_id']))->get('class_main')->result_array()[0]['main_name'];
+            // $datalist[$k]['sub_name'] = $this->db->where(array('sub_id' => $v['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
+            $datalist[$k]['status'] = $this->config->item('product_status')[$v['status']];
+        }
+
+        $this->api_msg->show('200', 'Success', $datalist);
+    }
+    function product_info()
+    {
+        $input = array('product_id');
+        $request = array('product_id');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        $data = $this->db->where($data)->get('product')->result_array()[0];
+        // 將字串變回array
+        $data['slide_imgs'] = explode(",",$data['slide_imgs']);
+
         $this->api_msg->show('200', 'Success', $data);
     }
+
     function product_set()
     {
-        $input = array('main_id', 'main_sort', 'main_name', 'main_link');
-        $request = array('main_name');
+        $input = array('product_id', 'product_name', 'main_img', 'slide_imgs', 'price', 'author', 'publisher', 'publication_date', 'language', 'stock', 'menu_id', 'main_id', 'sub_id', 'status', 'tag');
+        $request = array('product_id', 'product_name', 'main_img', 'price', 'author', 'publisher', 'publication_date', 'language', 'menu_id', 'main_id', 'sub_id', 'status');
         $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
-        if ($data['main_link'] == '') {
-            $data['main_link'] = '#';
+        $where['product_id'] = $data['product_id'];
+
+        // 將array用,區隔變成字串
+        $ans = '';
+        foreach ($data['slide_imgs'] as $k => $v) {
+            $ans .= $v . ',';
         }
-        $where['main_id'] = $data['main_id'];
+        $data['slide_imgs'] = $ans;
+
+
         $this->mod_db->insert_or_update($where, $data, 'product');
+        $this->api_msg->show('200');
+    }
+    function product_chg_status()
+    {
+        $input = array('product_id', 'status');
+        $request = array('product_id', 'status');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        $where['product_id'] = $data['product_id'];
+        unset($data['product_id']);
+        $this->mod_db->where($where)->set($data)->update('product');
         $this->api_msg->show('200');
     }
     function product_remove()
     {
-        $getpost = array('main_id');
-        $requred = array('main_id');
+        $getpost = array('product_id');
+        $requred = array('product_id');
         $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
-        $where = array('main_id' => $data['main_id']);
-        $this->mod_apicheck->chk_data($where, 'product', '帳號不存在');
+        $where = array('product_id' => $data['product_id']);
+        $this->mod_apicheck->chk_data($where, 'product', '商品不存在');
         $this->db->where($where)->delete('product');
         $this->api_msg->show('200', 'Success');
     }
-    // 排序設定
-    function product_sort()
+    function product_img_upload()
     {
-        $input_data = file_get_contents('php://input');
-        $input_data = json_decode($input_data, true);
-        foreach ($input_data as $k => $v) {
-            $this->db->where('main_id', $v['main_id'])->set(array('main_sort' => $v['main_sort']))->update('product');
-        }
-        $this->api_msg->show('200');
+        // echo exec('whoami');
+        $file_name =  uniqid() . '.jpg';
+        $output_file = "./upload/product/" . $file_name;
+        copy($_FILES['img']['tmp_name'], $output_file);
+        $url = "/upload/product/" . $file_name;
+        // echo  $output_file;
+        $this->api_msg->show('200', 'Success', $url);
     }
 
+    /*******************************
+     * 
+     * 折扣
+     * 
+     */
+    // TODO
+
+    /*******************************
+     * 
+     * 圖表
+     * 
+     */
+    // TODO
+
+    /*******************************
+     * 
+     * 訊息
+     * 
+     */
+    // TODO
+
+    /*******************************
+     * 
+     * 標籤
+     * 
+     */
+    // TODO
+
+    /*******************************
+     * 
+     * 購物車
+     * 
+     */
+    // TODO
 }

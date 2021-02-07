@@ -42,7 +42,7 @@ class Admin extends CI_Controller{
     {
         $this->mod_manager->chk_login_status();
         $view = array(
-            'title' => '主分類',
+            'title' => '大分類',
             'path'=>'admin/class/main'
         );
         $this->load->view('admin/templates/layout',$view);
@@ -51,17 +51,8 @@ class Admin extends CI_Controller{
     {
         $this->mod_manager->chk_login_status();
         $view = array(
-            'title' => '次分類',
-            'path'=>'admin/class/sub'
-        );
-        $this->load->view('admin/templates/layout',$view);
-    }
-    public function third_class()
-    {
-        $this->mod_manager->chk_login_status();
-        $view = array(
             'title' => '小分類',
-            'path'=>'admin/class/third'
+            'path'=>'admin/class/sub'
         );
         $this->load->view('admin/templates/layout',$view);
     }
@@ -82,13 +73,22 @@ class Admin extends CI_Controller{
      * 
      * product
      */
-    public function product_list($type = 1)
+    public function product_list()
     {
         $this->mod_manager->chk_login_status();
         $view = array(
             'title' => '商品列表',
             'path'=>'admin/product/list',
-            'main_id' => $type
+        );
+        $this->load->view('admin/templates/layout',$view);
+    }
+
+    public function product_set()
+    {
+        $this->mod_manager->chk_login_status();
+        $view = array(
+            'title' => '編輯商品',
+            'path'=>'admin/product/set',
         );
         $this->load->view('admin/templates/layout',$view);
     }

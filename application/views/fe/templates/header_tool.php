@@ -106,21 +106,21 @@
 							<ul class="menu-container">
 								<!-- Mega Menu
 								============================================= -->
-								<li v-for="list in menu" class="menu-item mega-menu"><a class="menu-link" :href="list.main_link">
-										<div>{{ list.main_name }}</div>
+								<li v-for="list in menu" class="menu-item mega-menu"><a class="menu-link" :href="list.menu_id">
+										<div>{{ list.menu_name }}</div>
 									</a>
-									<div v-if="list.sublist != '' " class="mega-menu-content mega-menu-style-2">
+									<div v-if="list.mainlist != '' " class="mega-menu-content mega-menu-style-2">
 										<div class="container">
 											<div class="row">
-												<ul v-for="item in list.sublist" class="sub-menu-container mega-menu-column col-lg-2">
-													<li class="menu-item mega-menu-title"><a class="menu-link" :href="item.sub_link">
-															<div>{{ item.sub_name }}</div>
+												<ul v-for="item in list.mainlist" class="sub-menu-container mega-menu-column col-lg-2">
+													<li class="menu-item mega-menu-title"><a class="menu-link" :href="'./' + list.menu_id + '/' + item.main_id">
+															<div>{{ item.main_name }}</div>
 														</a>
-														<ul v-if="item.thirdlist" class="sub-menu-container">
-															<li v-for="order in item.thirdlist" class="menu-item"><a class="menu-link" :href="order.third_link">
-																	<div>{{ order.third_name }}</div>
+														<ul v-if="item.sublist" class="sub-menu-container">
+															<li v-for="order in item.sublist" class="menu-item"><a class="menu-link" :href="'./' + list.menu_id + '/' + item.main_id + '.' + order.sub_id">
+																	<div>{{ order.sub_name }}</div>
 																</a></li>
-															<li class="menu-item text-gray"><a class="menu-link" :href="item.sub_link">
+															<li class="menu-item text-gray"><a class="menu-link" :href="'./' + list.menu_id + '/' + item.main_id">
 																	<div>看更多</div>
 																</a></li>
 														</ul>
@@ -131,16 +131,6 @@
 									</div>
 								</li>
 								<!-- .mega-menu end -->
-
-								<!-- <li v-for="list in menu" class="menu-item">
-									<a class="menu-link" href="index.html"><div>{{ list.main_name }}</div></a>
-										<ul v-if="list.sublist != '' " class="sub-menu-container">
-											<li v-for="item in list.sublist" class="menu-item">
-												<a class="menu-link" href="index-corporate.html"><div>{{ item.sub_name }}</div></a>
-												
-											</li>
-										</ul>
-								</li> -->
 
 								<li class="menu-item"><a class="menu-link" href="#">
 										<div>主題精選</div>

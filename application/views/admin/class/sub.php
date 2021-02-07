@@ -7,7 +7,16 @@
         <div class="card-body">
             <div>
                 <div class="form-group row justify-content-center">
-                    <label for="edit_alt" class="col-3 col-lg-3 col-form-label text-right">請先選擇主分類</label>
+                    <label for="edit_alt" class="col-3 col-lg-3 col-form-label text-right">請先選擇管別</label>
+                    <div class="col-6 col-lg-4">
+                        <select class="form-control" style="width:100%" v-model="submit.menu_id" @change="chg_menu($event)">
+                            <option disabled selected value="">請選擇</option>
+                            <option :value="order.menu_id" v-for="(order,idx) in class_menu">{{ order.menu_name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    <label for="edit_alt" class="col-3 col-lg-3 col-form-label text-right">選擇大分類</label>
                     <div class="col-6 col-lg-4">
                         <select class="form-control" style="width:100%" v-model="submit.main_id" @change="chg_main($event)">
                             <option disabled selected value="">請選擇</option>
@@ -20,7 +29,6 @@
                 <thead>
                     <tr>
                         <th>分類名稱</th>
-                        <th>連結網址</th>
                         <th><button type="button" class="btn btn-success btn-sm float-right" @click="open('add')">新增</button></th>
                     </tr>
                 </thead>
@@ -30,7 +38,6 @@
                     </tr>
                     <tr v-else v-for=" (order,idx) in class_sub" :data-sub_id="order.sub_id">
                         <td>{{ order.sub_name }}</td>
-                        <td>{{ order.sub_link }}</td>
                         <td>
                             <button type="button" class="btn btn-outline-info btn-sm" @click="open('edit',order)">編輯</button>
                             <button type="button" class="btn btn-outline-danger btn-sm" @click="remove(order.sub_id)">刪除</button>
@@ -48,7 +55,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">編輯</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">{{ modal_type }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -56,21 +63,23 @@
                 <div class="modal-body">
                     <input type="hidden" class="sn">
                     <div class="form-group">
-                        <label>主分類名稱</label>
-                        <div v-if="submit.main_name != '' ">
-                            <input type="text" :value="submit.main_name" class="form-control" readonly>
+                        <label>管別名稱</label>
+                        <div>
+                            <input type="text" :value="submit.menu_name" class="form-control class-val" placeholder="請先選擇管別" readonly>
                         </div>
-                        <div v-else>
-                            <input type="text" name="add_alt" value="請先選擇主分類" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>大分類名稱</label>
+                        <div>
+                            <input type="text" :value="submit.main_name" class="form-control class-val" placeholder="請先選擇大分類" readonly>
                         </div>
+                        <!-- <div v-else>
+                            <input type="text" name="add_alt" value="請先選擇大分類" class="form-control" readonly>
+                        </div> -->
                     </div>
                     <div class="form-group">
                         <label for="edit_name">分類名稱</label>
                         <input type="text" class="form-control require-val" id="edit_name" v-model="submit.sub_name">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_link">連結網址</label>
-                        <input type="text" class="form-control" id="edit_link" v-model="submit.sub_link">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -113,25 +122,28 @@
     new Vue({
         el: '#app',
         data: {
+            modal_type: '',
             submit: {
-                sub_id: '',
-                sub_name: '',
+                menu_id: '',
+                menu_name: '',
                 main_id: '',
                 main_name: '',
+                sub_id: '',
+                sub_name: '',
                 sub_sort: '',
-                sub_link: ''
             },
+            class_menu: [],
             class_main: [],
             class_sub: []
         },
         mounted() {
             let _this = this;
             axios({
-                url: '/api/class_main_list',
+                url: '/api/menu_class_list',
                 method: 'get',
                 responseType: 'json',
             }).then(function(data) {
-                _this.class_main = data.data.data;
+                _this.class_menu = data.data.data;
             })
         },
         methods: {
@@ -148,21 +160,25 @@
             },
             set() {
                 var _this = this;
-                if (common_func.examination('require')) {
-                    axios({
-                        method: 'post',
-                        url: '/api/class_sub_set',
-                        responseType: 'json',
-                        data: Qs.stringify(_this.submit)
-                    }).then(function(data) {
-                        console.log(data);
-                        if (data.data.sys_code == '200') {
-                            _this.sub_list();
-                            $("#show_edit_form").modal("hide");
-                        } else {
-                            Swal.fire('新增失敗');
-                        }
-                    })
+                if (common_func.examination('class', false)) {
+                    if (common_func.examination('require')) {
+                        axios({
+                            method: 'post',
+                            url: '/api/class_sub_set',
+                            responseType: 'json',
+                            data: Qs.stringify(_this.submit)
+                        }).then(function(data) {
+                            console.log(data);
+                            if (data.data.sys_code == '200') {
+                                _this.sub_list();
+                                $("#show_edit_form").modal("hide");
+                            } else {
+                                Swal.fire('新增失敗');
+                            }
+                        })
+                    }
+                } else {
+                    Swal.fire('請先選擇管別、大分類');
                 }
             },
             remove(sub_id) {
@@ -199,16 +215,34 @@
                     _this.submit.sub_id = '';
                     _this.submit.sub_name = '';
                     _this.submit.sub_link = '';
+                    _this.modal_type = '新增分類';
                 } else {
                     _this.submit.sub_id = order.sub_id;
                     _this.submit.sub_name = order.sub_name;
                     _this.submit.sub_link = order.sub_link;
                     _this.submit.level = order.level;
+                    _this.modal_type = '編輯分類';
                 }
                 $("#show_edit_form").modal("show");
                 // 刪除之前必填
                 const elements = document.getElementsByClassName("error_span");
                 while (elements.length > 0) elements[0].remove();
+            },
+            chg_menu(e = '') {
+                let _this = this;
+                _this.submit.menu_name = e.target.options[e.target.options.selectedIndex].text;
+                let data = {
+                    menu_id: e.target.value
+                }
+                axios({
+                    url: '/api/class_main_list',
+                    method: 'post',
+                    responseType: 'json',
+                    data: Qs.stringify(data)
+                }).then(function(data) {
+                    console.log(data.data);
+                    _this.class_main = data.data.data;
+                })
             },
             chg_main(e = '') {
                 let _this = this;
@@ -216,7 +250,7 @@
                     _this.submit.main_name = e.target.options[e.target.options.selectedIndex].text;
                 }
                 _this.sub_list();
-            },
+            }
         }
     })
 </script>

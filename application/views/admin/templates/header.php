@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><?= $title ?> | BMO</title>
-	<link rel="icon" type="image/png" sizes="32x32" href="/public/admin_assets/img/BmoLogo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/admin_assets/img/BmoLogo.png">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -32,6 +32,9 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/public/admin_assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/public/admin_assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
 
     <!-- jQuery -->

@@ -21,6 +21,11 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="/public/admin_assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- bs-custom-file-input -->
+<!-- <script src="/public/admin_assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script> -->
+<!-- Select2 -->
+<script src="/public/admin_assets/plugins/select2/js/select2.full.min.js"></script>
+
 <!-- ChartJS -->
 <!-- <script src="/public/admin_assets/plugins/chart.js/Chart.min.js"></script> -->
 <!-- Sparkline -->
