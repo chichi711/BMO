@@ -127,6 +127,8 @@
         methods: {
             main_list() {
                 let _this = this;
+                _this.class_main = [];
+
                 axios({
                     url: '/api/class_main_list',
                     method: 'post',

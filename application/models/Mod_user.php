@@ -41,7 +41,54 @@ class Mod_user extends CI_Model {
         }
     }
                                              
-                            
+        // 確認可以登入
+        function chk_login($user_id,$user_pwd){
+            $this->db->where('user_id',$user_id);
+            $this->db->where('user_pwd',$user_pwd);
+            if($this->db->count_all_results('user') == 0){
+                return FALSE;
+            }else{
+                return TRUE;
+            }
+        }
+        // 執行登入動作
+        function do_login($user_id){
+            $arr = $this->get_once($user_id);
+            unset($arr['user_pwd']);
+            $arr['login_status'] =  TRUE;
+            $this->db->where('user_id',$user_id)->update('user',array('last_datetime'=>date("Y-m-d H:i:s")));
+            $this->session->set_userdata($arr);
+        }
+        // 執行登出動作
+        function do_logout(){
+            $this->session->sess_destroy();
+            return TRUE;
+        }
+        // 確認目前登入狀態
+        function chk_login_status(){
+            $login_status = $this->session->userdata('login_status');
+            // 先判斷有沒有 session
+            if($login_status == TRUE){
+               return True;
+            } else{
+                return FALSE;
+            }
+            
+        }     
+        // 確認目前登入狀態
+        function get_login_val($login_page = ''){
+            $login_status = $this->session->userdata('login_status');
+            $user_id = $this->session->userdata('user_id');
+            // 先判斷有沒有 session
+            if($login_status == TRUE){
+               return $user_id;
+            }
+            if($login_page != "login"){
+                redirect(base_url('./login'));
+            }
+            return FALSE;
+            
+        }     
                         
 }
                         

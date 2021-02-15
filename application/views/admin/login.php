@@ -80,7 +80,7 @@
           }, function(data) {
             console.log(data);
             if (data.sys_code == '200') {
-              location.href = "./admin/index";
+              location.href = "./admin/";
             } else {
               swal.fire('登入錯誤');
             }

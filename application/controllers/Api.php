@@ -125,8 +125,8 @@ class Api extends CI_Controller
     function menu_list()
     {
         $menu_list = $this->config->item('menu');
-        $main_list = $this->db->order_by('main_id', 'asc')->get('class_main')->result_array();
-        $sub_list = $this->db->order_by('sub_id', 'asc')->get('class_sub')->result_array();
+        $main_list = $this->db->order_by('main_sort', 'asc')->get('class_main')->result_array();
+        $sub_list = $this->db->order_by('sub_sort', 'asc')->get('class_sub')->result_array();
 
         $datalist = $menu_list;
         $i = 0;
@@ -241,21 +241,22 @@ class Api extends CI_Controller
         $this->api_msg->show('200');
     }
     // 取得所有分類名稱
-    function get_all_class_name() {
-        $getpost = array('menu_id','main_id','sub_id');
-        $requred = array('menu_id','main_id');
+    function get_all_class_name()
+    {
+        $getpost = array('menu_id', 'main_id', 'sub_id');
+        $requred = array('menu_id', 'main_id');
         $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
 
         $menu = $this->config->item('menu');
-        foreach($menu as $k => $v) {
-            if($data['menu_id'] == $v['menu_id']){
+        foreach ($menu as $k => $v) {
+            if ($data['menu_id'] == $v['menu_id']) {
                 $data['menu_name'] = $v['menu_name'];
             }
         }
         $data['main_name'] = $this->db->where(array('main_id' => $data['main_id']))->get('class_main')->result_array()[0]['main_name'];
-        if($data['sub_id'] != ''){
+        if ($data['sub_id'] != '') {
             $data['sub_name'] = $this->db->where(array('sub_id' => $data['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
-        }else{
+        } else {
             $data['sub_name'] = '';
         }
 
@@ -278,17 +279,26 @@ class Api extends CI_Controller
     function product_list()
     {
         $input = array('menu_id', 'main_id', 'sub_id');
-        $request = array('menu_id', 'main_id', 'sub_id');
+        $request = array('menu_id');
         $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
-        $data = $this->db->where($data)->get('product')->result_array();
+
+        $this->db->where(array('menu_id' => $data['menu_id']));
+        if ($data['main_id'] != '') {
+            $this->db->where(array('main_id' => $data['main_id']));
+        }
+        if ($data['sub_id'] != '') {
+            $this->db->where(array('sub_id' => $data['sub_id']));
+        }
+
+        $data = $this->db->get('product')->result_array();
 
         $datalist = [];
-        foreach($data as $k => $v) {
+        foreach ($data as $k => $v) {
             $datalist[$k] = $v;
             $datalist[$k]['main_name'] = $this->db->where(array('main_id' => $v['main_id']))->get('class_main')->result_array()[0]['main_name'];
             $datalist[$k]['sub_name'] = $this->db->where(array('sub_id' => $v['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
             $datalist[$k]['status'] = $this->config->item('product_status')[$v['status']];
-            $datalist[$k]['slide_imgs'] = explode(",",$v['slide_imgs'])[0];
+            $datalist[$k]['slide_imgs'] = explode(",", $v['slide_imgs'])[0];
         }
 
         $this->api_msg->show('200', 'Success', $datalist);
@@ -299,25 +309,46 @@ class Api extends CI_Controller
         $request = array('product_id');
         $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
         $data = $this->db->where($data)->get('product')->result_array()[0];
+
+        $menu = $this->config->item('menu');
+        foreach ($menu as $k => $v) {
+            if ($data['menu_id'] == $v['menu_id']) {
+                $data['menu_name'] = $v['menu_name'];
+            }
+        }
+        $data['main_name'] = $this->db->where(array('main_id' => $data['main_id']))->get('class_main')->result_array()[0]['main_name'];
+        $data['sub_name'] = $this->db->where(array('sub_id' => $data['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
         // 將字串變回array
-        $data['slide_imgs'] = explode(",",$data['slide_imgs']);
+        if($data['slide_imgs']){
+            $data['slide_imgs'] = explode(",", $data['slide_imgs']);
+        }
 
         $this->api_msg->show('200', 'Success', $data);
     }
 
     function product_set()
     {
-        $input = array('product_id', 'product_name', 'main_img', 'slide_imgs', 'price', 'author', 'publisher', 'publication_date', 'language', 'stock', 'menu_id', 'main_id', 'sub_id', 'status', 'tag');
+        $input = array('product_id', 'product_name', 'main_img', 'slide_imgs', 'price', 'author', 'publisher', 'publication_date', 'language', 'stock', 'info', 'about_author', 'catalog', 'menu_id', 'main_id', 'sub_id', 'status', 'tag');
         $request = array('product_id', 'product_name', 'main_img', 'price', 'author', 'publisher', 'publication_date', 'language', 'menu_id', 'main_id', 'sub_id', 'status');
         $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
         $where['product_id'] = $data['product_id'];
 
         // 將array用,區隔變成字串
-        $ans = '';
-        foreach ($data['slide_imgs'] as $k => $v) {
-            $ans .= $v . ',';
+        if($data['slide_imgs']){
+            $lastItems = count($data['slide_imgs']);
+            $i = 0;
+            $ans = '';
+            foreach ($data['slide_imgs'] as $k => $v) {
+                // 最後一項不用加逗號
+                if (++$i === $lastItems) {
+                    $ans .= $v;
+                }else{
+                    $ans .= $v . ',';
+                }
+            }
+            $data['slide_imgs'] = $ans;
         }
-        $data['slide_imgs'] = $ans;
+
 
 
         $this->mod_db->insert_or_update($where, $data, 'product');
@@ -354,12 +385,78 @@ class Api extends CI_Controller
         $this->api_msg->show('200', 'Success', $url);
     }
 
-    /*******************************
+    /******************************
      * 
-     * 折扣
+     * 
+     * 編輯器上傳照片
+     * 
      * 
      */
-    // TODO
+    function summernote_upload(){
+        $file_name = "summernote_" . uniqid() . '.jpg';
+        if(!is_dir('./upload')){
+            mkdir('./upload', 0755, true);
+        }
+        if(!is_dir('./upload/summernote')){
+            mkdir('./upload/summernote', 0755, true);
+        }
+        $output_file = "./upload/summernote/".$file_name;
+        copy($_FILES['img']['tmp_name'],$output_file);
+        echo  $output_file;
+    }
+
+    /*******************************
+     * 
+     * 會員
+     * 
+     */
+
+    function user_add()
+    {
+        $input = array('user_id', 'email', 'user_pwd');
+        $request = array('user_id', 'email', 'user_pwd');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        $where['user_id'] = $data['user_id'];
+
+        $this->mod_apicheck->chk_repeat($where, 'user', '帳號重複');
+        $this->db->insert('user', $data);
+        $this->api_msg->show('200');
+    }
+    function user_login()
+    {
+        $getpost = array('user_id', 'user_pwd');
+        $requred = array('user_id', 'user_pwd');
+        $data = $this->getpost->get_post_json($getpost, $requred);
+        if ($this->mod_user->chk_login($data['user_id'], $data['user_pwd'])) {
+            $this->mod_user->do_login($data['user_id']);
+            $json_arr['session'] = $this->session->all_userdata();
+            $this->api_msg->show('200', 'success', $json_arr);
+        } else {
+            $this->api_msg->show('500', 'Login Failed');
+        }
+    }
+    function user_remove()
+    {
+        $getpost = array('user_id');
+        $requred = array('user_id');
+        $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
+        $where = array('user_id' => $data['user_id']);
+        $this->mod_apicheck->chk_data($where, 'user', '會員不存在');
+        $this->db->where($where)->delete('user');
+        $this->api_msg->show('200', 'Success');
+    }
+    function chk_login()
+    {
+        $data = $this->mod_user->chk_login_status();
+        $this->api_msg->show('200', 'Success', $data);
+    }
+
+    /*******************************
+     * 
+     * 購物車
+     * 
+     */
+        
 
     /*******************************
      * 
@@ -384,7 +481,7 @@ class Api extends CI_Controller
 
     /*******************************
      * 
-     * 購物車
+     * 折扣
      * 
      */
     // TODO

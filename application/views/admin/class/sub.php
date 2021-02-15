@@ -98,28 +98,13 @@
         // 拖移
         $("#sortable").sortable({
             update: function(event, ui) {
-                send_table_sort();
+                app.send_table_sort();
             }
         });
-
-        function send_table_sort() {
-            var sort_arr = [];
-            $('#sortable tr').each(function(k, v) {
-                item = {
-                    sub_id: $(this).data('sub_id'),
-                    sub_sort: k
-                }
-                sort_arr.push(item);
-            })
-
-            $.post('/api/class_sub_sort', JSON.stringify(sort_arr), function(data) {
-
-            }, 'json')
-        }
     });
 </script>
 <script>
-    new Vue({
+    let app = new Vue({
         el: '#app',
         data: {
             modal_type: '',
@@ -149,6 +134,8 @@
         methods: {
             sub_list() {
                 let _this = this;
+                _this.class_sub = [];
+
                 axios({
                     url: '/api/class_sub_list',
                     method: 'post',
@@ -250,6 +237,20 @@
                     _this.submit.main_name = e.target.options[e.target.options.selectedIndex].text;
                 }
                 _this.sub_list();
+            },
+            send_table_sort() {
+                let _this = this;
+                var sort_arr = [];
+                $('#sortable tr').each(function(k, v) {
+                    item = {
+                        sub_id: $(this).data('sub_id'),
+                        sub_sort: k
+                    }
+                    sort_arr.push(item);
+                })
+                $.post('/api/class_sub_sort', JSON.stringify(sort_arr), function(data) {
+
+                }, 'json')
             }
         }
     })

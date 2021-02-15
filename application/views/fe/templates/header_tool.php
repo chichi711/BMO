@@ -30,8 +30,8 @@
 						<!-- Logo
 						============================================= -->
 						<div id="logo">
-							<a href="/index" class="standard-logo" data-dark-logo="./public/assets/images/logo-dark.png"><img src="./public/assets/images/logo.png" alt="BMO Logo"></a>
-							<a href="/index" class="retina-logo" data-dark-logo="./public/assets/images/logo-dark@2x.png"><img src="./public/assets/images/logo@2x.png" alt="BMO Logo"></a>
+							<a href="/" class="standard-logo" data-dark-logo="/public/assets/images/logo-dark.png"><img src="/public/assets/images/Bmo-logo-black.png" alt="BMO Logo"></a>
+							<a href="/" class="retina-logo" data-dark-logo="/public/assets/images/logo-dark@2x.png"><img src="/public/assets/images/Bmo-logo-black@2x.png" alt="BMO Logo"></a>
 						</div><!-- #logo end -->
 
 						<div class="header-misc">
@@ -48,24 +48,12 @@
 								<a href="#" id="top-cart-trigger"><i class="icon-line-bag"></i><span class="top-cart-number">5</span></a>
 								<div class="top-cart-content">
 									<div class="top-cart-title">
-										<h4>Shopping Cart</h4>
+										<h4>購物車</h4>
 									</div>
 									<div class="top-cart-items">
 										<div class="top-cart-item">
 											<div class="top-cart-item-image">
-												<a href="#"><img src="./public/assets/images/shop/small/1.jpg" alt="Blue Round-Neck Tshirt" /></a>
-											</div>
-											<div class="top-cart-item-desc">
-												<div class="top-cart-item-desc-title">
-													<a href="#">Blue Round-Neck Tshirt with a Button</a>
-													<span class="top-cart-item-price d-block">$19.99</span>
-												</div>
-												<div class="top-cart-item-quantity">x 2</div>
-											</div>
-										</div>
-										<div class="top-cart-item">
-											<div class="top-cart-item-image">
-												<a href="#"><img src="./public/assets/images/shop/small/6.jpg" alt="Light Blue Denim Dress" /></a>
+												<a href="#"><img src="/public/assets/images/shop/small/6.jpg" alt="Light Blue Denim Dress" /></a>
 											</div>
 											<div class="top-cart-item-desc">
 												<div class="top-cart-item-desc-title">
@@ -78,16 +66,29 @@
 									</div>
 									<div class="top-cart-action">
 										<span class="top-checkout-price">$114.95</span>
-										<a href="#" class="button button-3d button-small m-0">View Cart</a>
+										<a href="#" class="button button-3d button-small m-0">查看購物車</a>
 									</div>
 								</div>
 							</div><!-- #top-cart end -->
 
 							<!-- Top login
 							============================================= -->
-							<div id="top-login" class="header-misc-icon">
-								<a href="#"><i class="icon-user1"></i></a>
-							</div><!-- #top-login end -->
+							<!-- <div v-if="login" id="top-login" class="header-misc-icon">
+								<a href="/logout"><i class="icon-signout"></i></a>
+							</div> -->
+							<div v-if="login" id="top-login" class="dropdown header-misc-icon">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="icon-user1"></i></a>
+								<ul class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenu1">
+									<!-- <a class="dropdown-item text-left" href="/profile">個人資料</a> -->
+									<a class="dropdown-item text-left" href="/logout">登出 <i class="icon-signout"></i></a>
+								</ul>
+							</div>
+
+							<div v-else id="top-login" class="header-misc-icon">
+								<a href="/login"><i class="icon-user1"></i></a>
+							</div>
+
+							<!-- #top-login end -->
 
 						</div>
 
@@ -106,21 +107,21 @@
 							<ul class="menu-container">
 								<!-- Mega Menu
 								============================================= -->
-								<li v-for="list in menu" class="menu-item mega-menu"><a class="menu-link" :href="list.menu_id">
+								<li v-for="list in menu" class="menu-item mega-menu"><a class="menu-link" href="javascript:void(0)">
 										<div>{{ list.menu_name }}</div>
 									</a>
 									<div v-if="list.mainlist != '' " class="mega-menu-content mega-menu-style-2">
 										<div class="container">
 											<div class="row">
 												<ul v-for="item in list.mainlist" class="sub-menu-container mega-menu-column col-lg-2">
-													<li class="menu-item mega-menu-title"><a class="menu-link" :href="'./' + list.menu_id + '?lid=' + item.main_id">
+													<li class="menu-item mega-menu-title"><a class="menu-link" :href="'/' + list.menu_id + '?lid=' + item.main_id">
 															<div>{{ item.main_name }}</div>
 														</a>
 														<ul v-if="item.sublist" class="sub-menu-container">
-															<li v-for="order in item.sublist" class="menu-item"><a class="menu-link" :href="'./' + list.menu_id + '?lid=' + item.main_id + '.' + order.sub_id">
+															<li v-for="order in item.sublist" class="menu-item"><a class="menu-link" :href="'/' + list.menu_id + '?lid=' + item.main_id + '.' + order.sub_id">
 																	<div>{{ order.sub_name }}</div>
 																</a></li>
-															<li class="menu-item text-gray"><a class="menu-link" :href="'./' + list.menu_id + '?lid=' + item.main_id">
+															<li class="menu-item text-gray"><a class="menu-link" :href="'/' + list.menu_id + '?lid=' + item.main_id">
 																	<div>看更多</div>
 																</a></li>
 														</ul>
@@ -156,7 +157,8 @@
 			new Vue({
 				el: '#header',
 				data: {
-					menu: []
+					login: '',
+					menu: [],
 				},
 				mounted() {
 					let _this = this;
@@ -166,6 +168,13 @@
 						responseType: 'json',
 					}).then(function(data) {
 						_this.menu = data.data.data;
+					})
+					axios({
+						url: '/api/chk_login',
+						method: 'get',
+						responseType: 'json',
+					}).then(function(data) {
+						_this.login = data.data.data;
 					})
 				}
 			})

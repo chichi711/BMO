@@ -107,6 +107,21 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="info">內容簡介</label>
+                <textarea name="" v-model="submit.info" id="info" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="about_author">作者介紹</label>
+                <textarea name="" v-model="submit.about_author" id="about_author" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="catalog">目錄</label>
+                <textarea name="" v-model="submit.catalog" id="catalog" class="form-control"></textarea>
+            </div>
+
         </div>
         <!-- /.card-body -->
 
@@ -118,7 +133,52 @@
 <!-- /.card -->
 
 
+<!-- <script>
+    $(function(){
 
+    // html 編輯器
+    $('.wyswyg').summernote({
+        height: 500,
+        callbacks: {
+            onImageUpload: function(image) {
+                console.log(image);
+                summernote_uploadImage(image[0], $(this));
+            }
+        }
+    });
+
+    // summernote.change
+    $('.wyswyg').on('summernote.change', function(we, contents, $editable) {
+        console.log(we)
+        console.log($editable)
+        // app['_data'].submit.info = contents;
+    });
+
+
+    function summernote_uploadImage(image, _this) {
+        let data = new FormData();
+        data.append("img", image);
+        $.ajax({
+            //上傳路徑
+            url: './api/summernote_upload',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: "post",
+            success: function(url) {
+                console.log(url)
+                let image = $('<img>').attr('src', url);
+                _this.summernote('insertImage', url, 'newimage');
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    }
+})
+
+</script> -->
 <script>
     function chg_main(e) {
         app['_data'].get_sub_class.main_id = e.value;
@@ -151,13 +211,16 @@
                 price: '',
                 language: '',
                 stock: '',
+                info: '',
+                about_author: '',
+                catalog: '',
                 status: '',
                 tag: [],
                 main_img: '/public/admin_assets/img/BmoLogo.png',
                 slide_imgs: [],
             },
             get_sub_class: {
-                menu_id: '',
+                menu_id: '<?= $_GET['mid'] ?>',
                 main_id: '',
             },
             manager: [],
@@ -170,7 +233,7 @@
             _this.get_url();
             axios({
                 url: '/api/class_main_list',
-                method: 'get',
+                method: 'post',
                 responseType: 'json',
                 data: Qs.stringify(_this.get_sub_class)
             }).then(function(data) {
@@ -189,6 +252,9 @@
             add() {
                 var _this = this;
                 if (common_func.examination('require')) {
+                    _this.submit.info =  $('#info').val().replace(/\n/g, "<br/>" );
+                    _this.submit.about_author =  $('#about_author').val().replace(/\n/g, "<br/>" );
+                    _this.submit.catalog =  $('#catalog').val().replace(/\n/g, "<br/>" );
                     axios({
                         method: 'post',
                         url: '/api/product_set',
@@ -209,28 +275,32 @@
                 var data = new FormData();
                 // var show_img = $(e.target).parent().parent().parent().find('.img_src');
                 // console.log(show_img);
-                data.append("img", e.target.files[0]);
+                if (_this.submit.slide_imgs.length >= 4) {
+                    Swal.fire('最多四張圖片');
+                } else {
+                    data.append("img", e.target.files[0]);
 
-                axios({
-                    method: 'post',
-                    url: '/api/product_img_upload',
-                    responseType: 'json',
-                    data: data,
-                    method: 'post'
-                }).then(function(data) {
-                    if (data.data.sys_code == '200') {
-                        if (type == 'main') {
-                            _this.submit.main_img = data.data.data;
+                    axios({
+                        method: 'post',
+                        url: '/api/product_img_upload',
+                        responseType: 'json',
+                        data: data,
+                        method: 'post'
+                    }).then(function(data) {
+                        if (data.data.sys_code == '200') {
+                            if (type == 'main') {
+                                _this.submit.main_img = data.data.data;
+                            } else {
+                                _this.submit.slide_imgs.push(data.data.data);
+                            }
+                            // console.log(show_img.attr('src'));
+                            // show_img.attr('src', data.data.data);
                         } else {
-                            _this.submit.slide_imgs.push(data.data.data);
+                            console.log(data.data);
+                            Swal.fire('Oops!', '資料上傳失敗，請稍後再試', 'error');
                         }
-                        // console.log(show_img.attr('src'));
-                        // show_img.attr('src', data.data.data);
-                    } else {
-                        console.log(data.data);
-                        Swal.fire('Oops!', '資料上傳失敗，請稍後再試', 'error');
-                    }
-                })
+                    })
+                }
             },
             call_sub_list() {
                 let _this = this;

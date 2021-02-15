@@ -5,7 +5,6 @@
 
 		<div class="container clearfix">
 			<h1 v-text="submit.sub_name == '' ? submit.main_name : submit.sub_name "></h1>
-			<span>Start Buying your Favourite Theme</span>
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item">{{ submit.menu_name }}</li>
 				<li class="breadcrumb-item">{{ submit.main_name }}</li>
@@ -39,7 +38,7 @@
 										<div class="bg-overlay">
 											<div class="bg-overlay-content align-items-end justify-content-between" data-hover-animate="fadeIn" data-hover-speed="400">
 												<a href="#" class="btn btn-dark mr-2"><i class="icon-shopping-cart"></i></a>
-												<a href="include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
+												<a href="/public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
 											</div>
 											<div class="bg-overlay-bg bg-transparent"></div>
 										</div>
@@ -69,7 +68,7 @@
 										<div class="bg-overlay">
 											<div class="bg-overlay-content align-items-end justify-content-between" data-hover-animate="fadeIn" data-hover-speed="400">
 												<a href="#" class="btn btn-dark mr-2"><i class="icon-shopping-cart"></i></a>
-												<a href="include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
+												<a href="/public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
 											</div>
 											<div class="bg-overlay-bg bg-transparent"></div>
 										</div>
@@ -93,28 +92,30 @@
 							<div v-for="item in product_list" class="product col-md-4 col-sm-6 col-12">
 								<div class="grid-inner">
 									<div class="product-image">
-										<a href="#"><img :src="item.main_img" alt="BMO"></a>
-										<a href="#"><img :src="item.slide_imgs" alt="BMO"></a>
+										<a :href="'./product/' + item.product_id"><img :src="item.main_img" alt="BMO"></a>
+										<a :href="'./product/' + item.product_id"><img :src="item.slide_imgs" alt="BMO"></a>
 										<div class="bg-overlay">
-											<div class="bg-overlay-content align-items-end justify-content-between" data-hover-animate="fadeIn" data-hover-speed="400">
+											<div :class="['bg-overlay-content', 'align-items-end', 'justify-content-between', 'animated', {'fadeOut' : !active }, {'fadeIn' : active }]" @mouseleave.stop="mouse_in_out" @mouseenter.stop="mouse_in_out" data-hover-animate="fadeIn" data-hover-speed="400">
 												<a href="#" class="btn btn-dark mr-2"><i class="icon-shopping-cart"></i></a>
-												<a href="include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
+												<a href="/public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
 											</div>
 											<div class="bg-overlay-bg bg-transparent"></div>
 										</div>
 									</div>
 									<div class="product-desc">
 										<div class="product-title">
-											<h3><a href="#">{{ item.product_name }}</a></h3>
+											<h3><a :href="'./product/' + item.product_id">{{ item.product_name }}</a></h3>
 										</div>
+										<div>{{ item.author }} 著</div>
+										<!-- <div>{{ item.publisher }} 出版</div> -->
 										<div class="product-price">${{ item.price }}</div>
-										<div class="product-rating">
+										<!-- <div class="product-rating">
 											<i class="icon-star3"></i>
 											<i class="icon-star3"></i>
 											<i class="icon-star3"></i>
 											<i class="icon-star-half-full"></i>
 											<i class="icon-star-empty"></i>
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</div>
@@ -131,86 +132,17 @@
 
 							<div class="widget widget_links clearfix">
 
-								<h4>Shop Categories</h4>
+								<h4>{{ submit.menu_name }}</h4>
 								<ul>
-									<li><a href="#">Shirts</a></li>
-									<li><a href="#">Pants</a></li>
-									<li><a href="#">Tshirts</a></li>
-									<li><a href="#">Sunglasses</a></li>
-									<li><a href="#">Shoes</a></li>
-									<li><a href="#">Bags</a></li>
-									<li><a href="#">Watches</a></li>
+									<li class="float-left w-100" style="display: list-item;" v-for="item in main_list">
+										<a class="w-75" :href="'/' + submit.menu_id + '?lid=' + item.main_id">{{ item.main_name }}</a>
+										<ul v-if="submit.main_id == item.main_id">
+											<li v-for="order in sub_list">
+												<a :href="'/' + submit.menu_id + '?lid=' + item.main_id + '.' + order.sub_id">{{ order.sub_name }}</a>
+											</li>
+										</ul>
+									</li>
 								</ul>
-
-							</div>
-
-							<div class="widget clearfix">
-
-								<h4>Recent Items</h4>
-								<div class="posts-sm row col-mb-30" id="recent-shop-list-sidebar">
-									<div class="entry col-12">
-										<div class="grid-inner row no-gutters">
-											<div class="col-auto">
-												<div class="entry-image">
-													<a href="#"><img src="/public/assets/images/shop/small/1.jpg" alt="Image"></a>
-												</div>
-											</div>
-											<div class="col pl-3">
-												<div class="entry-title">
-													<h4><a href="#">Blue Round-Neck Tshirt</a></h4>
-												</div>
-												<div class="entry-meta no-separator">
-													<ul>
-														<li class="color">$29.99</li>
-														<li><i class="icon-star3"></i><i class="icon-star3"></i><i class="icon-star3"></i><i class="icon-star3"></i><i class="icon-star-half-full"></i></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<div class="entry col-12">
-										<div class="grid-inner row no-gutters">
-											<div class="col-auto">
-												<div class="entry-image">
-													<a href="#"><img src="/public/assets/images/shop/small/6.jpg" alt="Image"></a>
-												</div>
-											</div>
-											<div class="col pl-3">
-												<div class="entry-title">
-													<h4><a href="#">Checked Short Dress</a></h4>
-												</div>
-												<div class="entry-meta no-separator">
-													<ul>
-														<li class="color">$23.99</li>
-														<li><i class="icon-star3"></i><i class="icon-star3"></i><i class="icon-star3"></i><i class="icon-star-half-full"></i><i class="icon-star-empty"></i></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<div class="entry col-12">
-										<div class="grid-inner row no-gutters">
-											<div class="col-auto">
-												<div class="entry-image">
-													<a href="#"><img src="/public/assets/images/shop/small/7.jpg" alt="Image"></a>
-												</div>
-											</div>
-											<div class="col pl-3">
-												<div class="entry-title">
-													<h4><a href="#">Light Blue Denim Dress</a></h4>
-												</div>
-												<div class="entry-meta no-separator">
-													<ul>
-														<li class="color">$19.99</li>
-														<li><i class="icon-star3"></i><i class="icon-star3"></i><i class="icon-star3"></i><i class="icon-star-empty"></i><i class="icon-star-empty"></i></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
 
 							</div>
 
@@ -223,10 +155,19 @@
 	</section><!-- #content end -->
 </div>
 
+<!-- <script>
+	$('.fadeOut').mouseover(function () {
+		console.log(e);
+	})
+	$('.fadeOut').mouseout(function () {
+		console.log(e);
+	})
+</script> -->
 <script>
 	new Vue({
 		el: "#app",
 		data: {
+			active: false,
 			submit: {
 				menu_id: '<?= $active ?>',
 				menu_name: '',
@@ -250,6 +191,26 @@
 			}).then(function(data) {
 				if (data.data.sys_code == '200') {
 					_this.submit = data.data.data;
+				}
+			})
+			axios({
+				url: '/api/class_main_list',
+				method: 'post',
+				responseType: 'json',
+				data: Qs.stringify(_this.submit)
+			}).then(function(data) {
+				if (data.data.sys_code == '200') {
+					_this.main_list = data.data.data;
+				}
+			})
+			axios({
+				url: '/api/class_sub_list',
+				method: 'post',
+				responseType: 'json',
+				data: Qs.stringify(_this.submit)
+			}).then(function(data) {
+				if (data.data.sys_code == '200') {
+					_this.sub_list = data.data.data;
 				}
 			})
 			_this.get_product_list();
@@ -295,7 +256,7 @@
 						console.log(lid);
 					}
 				} else {
-					history.back();
+					// TODO
 				}
 			},
 			call_class_main() {
@@ -310,6 +271,11 @@
 						_this.main_list = data.data.data;
 					}
 				})
+			},
+			mouse_in_out() {
+				let _this = this;
+				_this.active = !_this.active;
+				console.log(_this.active);
 			}
 		}
 	})

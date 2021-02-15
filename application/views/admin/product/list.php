@@ -1,7 +1,6 @@
 <div id="app">
     <div class="mb-3">
-        <a v-for="item in menu_list" :href="'/admin/product_list?mid=' + item.menu_id" 
-        :class="[ {'btn-aqua' : item.menu_id == submit.menu_id? true:false }, {'btn-outline-aqua' : item.menu_id == submit.menu_id? false:true },
+        <a v-for="item in menu_list" :href="'/admin/product_list?mid=' + item.menu_id" :class="[ {'btn-aqua' : item.menu_id == submit.menu_id? true:false }, {'btn-outline-aqua' : item.menu_id == submit.menu_id? false:true },
          'chg_class', 'btn', 'btn-rounded', 'mr-2']">{{ item.menu_name }}</a>
     </div>
     <!-- Default box -->
@@ -44,7 +43,10 @@
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
-
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+        </ul>
+    </nav>
 
 </div>
 
@@ -81,6 +83,9 @@
                     data: Qs.stringify(_this.submit)
                 }).then(function(data) {
                     _this.product = data.data.data;
+                    if (data.data.data != '') {
+                        common_func.pageGen(data.data.data.current_page, data.data.data.total_page)
+                    }
                 })
             },
             remove(product_id) {

@@ -41,7 +41,7 @@
 <!-- Tempusdominus Bootstrap 4 -->
 <!-- <script src="/public/admin_assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> -->
 <!-- Summernote -->
-<!-- <script src="/public/admin_assets/plugins/summernote/summernote-bs4.min.js"></script> -->
+<script src="/public/admin_assets/plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
 <!-- <script src="/public/admin_assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> -->
 <!-- AdminLTE App -->
