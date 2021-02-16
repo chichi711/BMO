@@ -28,6 +28,9 @@ class Api extends CI_Controller
     function manager_list()
     {
         $data = $this->db->order_by('level', 'asc')->get('manager_main')->result_array();
+        foreach ($data as $k => &$v) {
+            unset($v['manager_pwd']);
+        }
         $this->api_msg->show('200', 'Success', $data);
     }
     function manager_add()
@@ -319,7 +322,7 @@ class Api extends CI_Controller
         $data['main_name'] = $this->db->where(array('main_id' => $data['main_id']))->get('class_main')->result_array()[0]['main_name'];
         $data['sub_name'] = $this->db->where(array('sub_id' => $data['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
         // 將字串變回array
-        if($data['slide_imgs']){
+        if ($data['slide_imgs']) {
             $data['slide_imgs'] = explode(",", $data['slide_imgs']);
         }
 
@@ -334,7 +337,7 @@ class Api extends CI_Controller
         $where['product_id'] = $data['product_id'];
 
         // 將array用,區隔變成字串
-        if($data['slide_imgs']){
+        if ($data['slide_imgs']) {
             $lastItems = count($data['slide_imgs']);
             $i = 0;
             $ans = '';
@@ -342,18 +345,17 @@ class Api extends CI_Controller
                 // 最後一項不用加逗號
                 if (++$i === $lastItems) {
                     $ans .= $v;
-                }else{
+                } else {
                     $ans .= $v . ',';
                 }
             }
             $data['slide_imgs'] = $ans;
         }
 
-
-
         $this->mod_db->insert_or_update($where, $data, 'product');
         $this->api_msg->show('200');
     }
+
     function product_chg_status()
     {
         $input = array('product_id', 'status');
@@ -364,6 +366,7 @@ class Api extends CI_Controller
         $this->mod_db->where($where)->set($data)->update('product');
         $this->api_msg->show('200');
     }
+
     function product_remove()
     {
         $getpost = array('product_id');
@@ -392,16 +395,17 @@ class Api extends CI_Controller
      * 
      * 
      */
-    function summernote_upload(){
+    function summernote_upload()
+    {
         $file_name = "summernote_" . uniqid() . '.jpg';
-        if(!is_dir('./upload')){
+        if (!is_dir('./upload')) {
             mkdir('./upload', 0755, true);
         }
-        if(!is_dir('./upload/summernote')){
+        if (!is_dir('./upload/summernote')) {
             mkdir('./upload/summernote', 0755, true);
         }
-        $output_file = "./upload/summernote/".$file_name;
-        copy($_FILES['img']['tmp_name'],$output_file);
+        $output_file = "./upload/summernote/" . $file_name;
+        copy($_FILES['img']['tmp_name'], $output_file);
         echo  $output_file;
     }
 
@@ -427,6 +431,18 @@ class Api extends CI_Controller
         $getpost = array('user_id', 'user_pwd');
         $requred = array('user_id', 'user_pwd');
         $data = $this->getpost->get_post_json($getpost, $requred);
+
+        // 如果session有購物車資料的話，存進資料庫
+        if ($this->session->userdata('cart')) {
+            $cart = $this->session->userdata('cart');
+            foreach ($cart as $key => $val) {
+                $where = array('user_id' => $data['user_id'], 'product_id' => $val['product_id']);
+
+                $this->mod_cart->insert_or_update($where, $val, 'cart');
+            }
+            $this->session->unset_userdata('cart');
+        }
+
         if ($this->mod_user->chk_login($data['user_id'], $data['user_pwd'])) {
             $this->mod_user->do_login($data['user_id']);
             $json_arr['session'] = $this->session->all_userdata();
@@ -447,7 +463,7 @@ class Api extends CI_Controller
     }
     function chk_login()
     {
-        $data = $this->mod_user->chk_login_status();
+        $data = $this->mod_user->get_login_val();
         $this->api_msg->show('200', 'Success', $data);
     }
 
@@ -456,7 +472,190 @@ class Api extends CI_Controller
      * 購物車
      * 
      */
-        
+    function cart_add()
+    {
+        $input = array('product_id', 'qty');
+        $request = array('product_id', 'qty');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        if ($this->mod_user->chk_login_status()) {
+            $data['user_id'] = $this->mod_user->get_login_val();
+            $where = array('user_id' => $data['user_id'], 'product_id' => $data['product_id']);
+            $this->mod_cart->insert_or_update($where, $data, 'cart');
+        } else {
+            $this->mod_cart->set_2arr_cart($data, $data['product_id'], $data['qty']);
+        }
+        $this->api_msg->show('200');
+    }
+
+    function cart_edit()
+    {
+        $request = array('sn', 'qty');
+        $requred = array('sn', 'qty');
+        $init_data = $this->getpost->array2d_json_format($request,$requred);
+        if($init_data == false){
+            $json_arr['requred_data'] = $requred;
+            $json_arr['request_data'] = $request;
+            $json_arr['requred'] = $this->getpost->array2d_array_error($request,$requred);
+            $this->api->show('000','',$json_arr);
+        }
+        foreach($init_data as  $key => $val){
+            $this->db->where(array('sn' => $val['sn']))->set(array('qty' => $val['qty']))->update('cart');
+        }
+        $this->api_msg->show('200');
+    }
+
+    function cart_remove()
+    {
+        $getpost = array('sn');
+        $requred = array('sn');
+        $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
+        $where = array('sn' => $data['sn']);
+        $this->mod_apicheck->chk_data($where, 'cart', '資料不存在');
+        $this->db->where($where)->delete('cart');
+        $this->api_msg->show('200', 'Success');
+    }
+
+    function user_cart_remove()
+    {
+        $getpost = array('user_id');
+        $requred = array('user_id');
+        $data = $this->mod_apicheck->chk_get_post_requred($getpost, $requred);
+        $where = array('user_id' => $data['user_id']);
+        $this->db->where($where)->delete('cart');
+        $this->api_msg->show('200', 'Success');
+    }
+
+    function cart_list()
+    {
+        $input = array('user_id');
+        $request = array('user_id');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        $this->db->where(array('user_id' => $data['user_id']));
+        $data = $this->db->order_by('sn','desc')->get('cart')->result_array();
+
+        if($data){
+            $total_amount = 0;
+            foreach($data as $key => &$val) {
+                $product = $this->db->where(array('product_id' => $val['product_id']))->get('product')->result_array()[0];
+                $val['product_name'] = $product['product_name'];
+                $val['main_img'] = $product['main_img'];
+                $val['price'] = $product['price'];
+                $val['sub_total'] = $product['price'] * $val['qty'];
+                $total_amount += $val['sub_total'];
+            }
+            $datalist['datalist'] = $data;
+            $datalist['total_amount'] = $total_amount;
+            $this->api_msg->show('200', 'Success', $datalist);
+        } else {
+            $this->api_msg->show('204', 'No Data');
+        }
+    }
+
+    function session_cart_list()
+    {
+        $data = $this->session->userdata('cart');
+        if($data){
+            foreach($data as $key => &$val) {
+                $product = $this->db->where(array('product_id' => $val['product_id']))->get('product')->result_array()[0];
+                $val['product_name'] = $product['product_name'];
+                $val['main_img'] = $product['main_img'];
+                $val['price'] = $product['price'];
+            }
+            $this->api_msg->show('200', 'Success', $data);
+        }else{
+            $this->api_msg->show('204', 'No Data');
+        }
+    }
+    /*******************************
+     * 
+     * 訂單
+     * 
+     * payment 付款方式
+     * freight 運費
+     * freight_com 物流名稱
+     * total_amount 總金額
+     * 
+     */
+    function order_main_add()
+    {
+        $input = array('order_id', 'user_id', 'receive_name', 'receive_mobile', 'receive_addr', 'payment', 'freight', 'total_amount', 'freight_com');
+        $request = array('order_id', 'user_id', 'receive_name', 'receive_mobile', 'receive_addr', 'payment', 'freight', 'total_amount', 'freight_com');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+
+        $data['order_status'] = 0;
+        $data['creat_datetime'] = date('Y-m-d H:i:s');
+        $data['update_datetime'] = date('Y-m-d H:i:s');
+
+        $this->db->insert('order_main', $data);
+        $this->api_msg->show('200');
+    }
+    function order_main_edit()
+    {
+        $input = array('order_id','order_status', 'user_id', 'receive_name', 'receive_mobile', 'receive_addr', 'payment', 'freight', 'total_amount', 'freight_com');
+        $request = array('order_id','order_status', 'user_id', 'receive_name', 'receive_mobile', 'receive_addr', 'payment', 'freight', 'total_amount', 'freight_com');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+
+        $this->db->where(array('order_id' => $data['order_id']))->set($data)->update('order_main');
+        $this->api_msg->show('200');
+    }
+
+    function order_sub_add()
+    {
+        $request = array('order_id','product_id', 'product_name', 'main_img', 'price', 'qty', 'sub_total');
+        $requred = array('product_id', 'product_name', 'main_img', 'price', 'qty', 'sub_total');
+        $init_data = $this->getpost->array2d_json_format($request,$requred);
+        if($init_data == false){
+            $json_arr['requred_data'] = $requred;
+            $json_arr['request_data'] = $request;
+            $json_arr['requred'] = $this->getpost->array2d_array_error($request,$requred);
+            $this->api_msg->show('000','',$json_arr);
+        }
+        foreach($init_data as  $key => $val){
+            $val['order_id'] = $init_data[0]['order_id'];
+            $this->db->insert('order_sub', $val);
+        }
+        $this->api_msg->show('200');
+    }
+    function order_sub_edit()
+    {
+        // $request = array('order_id','product_id', 'product_name', 'main_img', 'price', 'qty', 'sub_total');
+        // $requred = array('order_id','product_id', 'product_name', 'main_img', 'price', 'qty', 'sub_total');
+        // $init_data = $this->getpost->array2d_json_format($request,$requred);
+        // if($init_data == false){
+        //     $json_arr['requred_data'] = $requred;
+        //     $json_arr['request_data'] = $request;
+        //     $json_arr['requred'] = $this->getpost->array2d_array_error($request,$requred);
+        //     $this->api->show('000','',$json_arr);
+        // }
+        // $where = array('order_id' => $init_data[0]['order_id']);
+        // $this->db->where($where)->delete('order_sub');
+        // foreach($init_data as  $key => $val){
+        //     $this->db->insert('order_sub', $val);
+        // }
+        // $this->api_msg->show('200');
+    }
+
+    function order_list()
+    {
+        $datalist = $this->db->order_by('update_datetime','desc')->get('order_main')->result_array();
+        foreach($datalist as  $key => &$val){
+            $val['order_status_name'] = $this->config->item('order_status')[$val['order_status']];
+        }
+
+        $this->api_msg->show('200', 'Success', $datalist);
+    }
+
+    function order_info()
+    {
+        $input = array('order_id');
+        $request = array('order_id');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        $datalist['main'] = $this->db->where($data)->get('order_main')->result_array()[0];
+        $datalist['sub'] = $this->db->where($data)->get('order_sub')->result_array();
+
+
+        $this->api_msg->show('200', 'Success', $datalist);
+    }
 
     /*******************************
      * 

@@ -45,28 +45,28 @@
 							<!-- Top Cart
 							============================================= -->
 							<div id="top-cart" class="header-misc-icon d-none d-sm-block">
-								<a href="#" id="top-cart-trigger"><i class="icon-line-bag"></i><span class="top-cart-number">5</span></a>
+								<a href="#" id="top-cart-trigger"><i class="icon-line-bag"></i><span v-if="cart_list != '' " class="top-cart-number">{{ cart_list_length }}</span></a>
 								<div class="top-cart-content">
 									<div class="top-cart-title">
 										<h4>購物車</h4>
 									</div>
 									<div class="top-cart-items">
-										<div class="top-cart-item">
+										<div v-for="item in cart_list" class="top-cart-item">
 											<div class="top-cart-item-image">
-												<a href="#"><img src="/public/assets/images/shop/small/6.jpg" alt="Light Blue Denim Dress" /></a>
+												<a href="#"><img :src="item.main_img" alt="Light Blue Denim Dress" /></a>
 											</div>
 											<div class="top-cart-item-desc">
 												<div class="top-cart-item-desc-title">
-													<a href="#">Light Blue Denim Dress</a>
-													<span class="top-cart-item-price d-block">$24.99</span>
+													<a href="#">{{ item.product_name }}</a>
+													<span class="top-cart-item-price d-block">${{ item.price }}</span>
 												</div>
-												<div class="top-cart-item-quantity">x 3</div>
+												<div class="top-cart-item-quantity">x {{ item.qty }}</div>
 											</div>
 										</div>
 									</div>
 									<div class="top-cart-action">
-										<span class="top-checkout-price">$114.95</span>
-										<a href="#" class="button button-3d button-small m-0">查看購物車</a>
+										<!-- <span class="top-checkout-price">$114.95</span> -->
+										<a href="/cart_list" class="button button-3d button-small m-0">完整清單</a>
 									</div>
 								</div>
 							</div><!-- #top-cart end -->
@@ -133,12 +133,12 @@
 								</li>
 								<!-- .mega-menu end -->
 
-								<li class="menu-item"><a class="menu-link" href="#">
+								<!-- <li class="menu-item"><a class="menu-link" href="#">
 										<div>主題精選</div>
 									</a></li>
 								<li class="menu-item"><a class="menu-link" href="#">
 										<div>線上客服</div>
-									</a></li>
+									</a></li> -->
 							</ul>
 
 						</nav><!-- #primary-menu end -->
@@ -159,6 +159,11 @@
 				data: {
 					login: '',
 					menu: [],
+					cart_list: [],
+					cart_list_length: '',
+					submit: {
+						user_id: ''
+					}
 				},
 				mounted() {
 					let _this = this;
@@ -175,7 +180,46 @@
 						responseType: 'json',
 					}).then(function(data) {
 						_this.login = data.data.data;
+						_this.submit.user_id = data.data.data;
+						_this.get_shopping_cart();
 					})
+				},
+				methods: {
+					get_shopping_cart() {
+						let _this = this;
+						if (_this.login) {
+							axios({
+								url: '/api/cart_list',
+								method: 'post',
+								responseType: 'json',
+								data: Qs.stringify(_this.submit)
+							}).then(function(data) {
+								if (data.data.sys_code == '200') {
+									_this.cart_list = data.data.datalist;
+									_this.cart_list_length = data.data.datalist.length;
+									if (_this.cart_list_length > 4) {
+										_this.cart_list = _this.cart_list.slice(0, 4);
+									}
+								}
+							})
+						} else {
+							axios({
+								url: '/api/session_cart_list',
+								method: 'post',
+								responseType: 'json',
+								data: Qs.stringify(_this.submit)
+							}).then(function(data) {
+								if (data.data.sys_code == '200') {
+									_this.cart_list = data.data.data;
+									_this.cart_list_length = data.data.data.length;
+									if (_this.cart_list_length > 4) {
+										_this.cart_list = _this.cart_list.slice(0, 4);
+									}
+								}
+
+							})
+						}
+					}
 				}
 			})
 		</script>

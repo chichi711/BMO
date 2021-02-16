@@ -1,4 +1,7 @@
 <?php
+
+use phpDocumentor\Reflection\Location;
+
 class FE extends CI_Controller{
 
     
@@ -77,20 +80,15 @@ class FE extends CI_Controller{
     public function logout()
     {
         $this->mod_user->do_logout();
-        $data = array(
-            'title' => '',
-            'path'=>'fe/index',
-            "active"=>'BMO',
-        );
-        $this->load->view('fe/templates/layout',$data);
+        redirect(base_url('./'));
     }
     public function cart_list()
     {
-        $this->mod_user->do_logout();
+        if(!$this->mod_user->chk_login_status()) redirect(base_url('./login'));
         $data = array(
-            'title' => '',
-            'path'=>'fe/cart',
-            "active"=>'BMO',
+            'title' => '購物車',
+            'path'=>  'fe/cart',
+            "active"=>'購物車',
         );
         $this->load->view('fe/templates/layout',$data);
     }

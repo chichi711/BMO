@@ -56,12 +56,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/admin" class="nav-link">
+                            <a href="/admin/order_list" class="nav-link">
                                 <i class="nav-icon fas fa-shopping-cart"></i>
-                                <p>購物車管理</p>
+                                <p>訂單管理</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="/admin" class="nav-link">
                                 <i class="nav-icon fas fa-edit"></i>
                                 <p>折扣設定(每日66折)</p>
@@ -84,13 +84,13 @@
                                 <i class="nav-icon fas fa-tag"></i>
                                 <p>標籤列表</p>
                             </a>
-                        </li>
-                        <li class="nav-item">
+                        </li> -->
+                        <!-- <li class="nav-item">
                             <a href="/admin" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>會員管理</p>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a href="/admin/manager_list" class="nav-link">
                                 <i class="nav-icon fas fa-user-alt"></i>
@@ -103,12 +103,46 @@
                         break;
                     case '1':
                     ?>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-bars"></i>
+                                <p>
+                                    選單
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/admin/main_class" class="nav-link">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>大分類</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/admin/sub_class" class="nav-link">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>小分類</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
                     <?php
                         break;
                     case '2':
                     ?>
-
+                        <li class="nav-item">
+                            <a href="/admin/product_list?mid=books" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>商品管理</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/order_list" class="nav-link">
+                                <i class="nav-icon fas fa-shopping-cart"></i>
+                                <p>訂單管理</p>
+                            </a>
+                        </li>
                 <?php
                         break;
                 } ?>

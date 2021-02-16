@@ -29,75 +29,16 @@
 							============================================= -->
 						<div id="shop" class="shop row grid-container gutter-20" data-layout="fitRows">
 
-							<div class="product col-md-4 col-sm-6 col-12">
-								<div class="grid-inner">
-									<div class="product-image">
-										<a href="#"><img src="/public/assets/images/shop/dress/1.jpg" alt="Checked Short Dress"></a>
-										<a href="#"><img src="/public/assets/images/shop/dress/1-1.jpg" alt="Checked Short Dress"></a>
-										<div class="sale-flash badge badge-secondary p-2">Out of Stock</div>
-										<div class="bg-overlay">
-											<div class="bg-overlay-content align-items-end justify-content-between" data-hover-animate="fadeIn" data-hover-speed="400">
-												<a href="#" class="btn btn-dark mr-2"><i class="icon-shopping-cart"></i></a>
-												<a href="/public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
-											</div>
-											<div class="bg-overlay-bg bg-transparent"></div>
-										</div>
-									</div>
-									<div class="product-desc">
-										<div class="product-title">
-											<h3><a href="#">Checked Short Dress</a></h3>
-										</div>
-										<div class="product-price"><del>$24.99</del> <ins>$12.49</ins></div>
-										<div class="product-rating">
-											<i class="icon-star3"></i>
-											<i class="icon-star3"></i>
-											<i class="icon-star3"></i>
-											<i class="icon-star3"></i>
-											<i class="icon-star-half-full"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="product col-md-4 col-sm-6 col-12">
-								<div class="grid-inner">
-									<div class="product-image">
-										<a href="#"><img src="/public/assets/images/shop/sunglasses/1.jpg" alt="Unisex Sunglasses"></a>
-										<a href="#"><img src="/public/assets/images/shop/sunglasses/1-1.jpg" alt="Unisex Sunglasses"></a>
-										<div class="sale-flash badge badge-success p-2 text-uppercase">Sale!</div>
-										<div class="bg-overlay">
-											<div class="bg-overlay-content align-items-end justify-content-between" data-hover-animate="fadeIn" data-hover-speed="400">
-												<a href="#" class="btn btn-dark mr-2"><i class="icon-shopping-cart"></i></a>
-												<a href="/public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
-											</div>
-											<div class="bg-overlay-bg bg-transparent"></div>
-										</div>
-									</div>
-									<div class="product-desc">
-										<div class="product-title">
-											<h3><a href="#">Unisex Sunglasses</a></h3>
-										</div>
-										<div class="product-price"><del>$19.99</del> <ins>$11.99</ins></div>
-										<div class="product-rating">
-											<i class="icon-star3"></i>
-											<i class="icon-star3"></i>
-											<i class="icon-star3"></i>
-											<i class="icon-star-empty"></i>
-											<i class="icon-star-empty"></i>
-										</div>
-									</div>
-								</div>
-							</div>
 
 							<div v-for="item in product_list" class="product col-md-4 col-sm-6 col-12">
 								<div class="grid-inner">
 									<div class="product-image">
 										<a :href="'./product/' + item.product_id"><img :src="item.main_img" alt="BMO"></a>
-										<a :href="'./product/' + item.product_id"><img :src="item.slide_imgs" alt="BMO"></a>
+										<a v-if="item.slide_imgs != '' " :href="'./product/' + item.product_id"><img :src="item.slide_imgs" alt="BMO"></a>
 										<div class="bg-overlay">
-											<div :class="['bg-overlay-content', 'align-items-end', 'justify-content-between', 'animated', {'fadeOut' : !active }, {'fadeIn' : active }]" @mouseleave.stop="mouse_in_out" @mouseenter.stop="mouse_in_out" data-hover-animate="fadeIn" data-hover-speed="400">
-												<a href="#" class="btn btn-dark mr-2"><i class="icon-shopping-cart"></i></a>
-												<a href="/public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a>
+											<div class="bg-overlay-content align-items-end justify-content-between animated fadeOut" @mouseleave="mouse_in_out($event)" @mouseenter="mouse_in_out($event)" data-hover-animate="fadeIn" data-hover-speed="400">
+												<a href="#" class="btn btn-dark mr-2" @click="add_cart(item.product_id)"><i class="icon-shopping-cart"></i></a>
+												<!-- <a href="/public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a> -->
 											</div>
 											<div class="bg-overlay-bg bg-transparent"></div>
 										</div>
@@ -167,7 +108,6 @@
 	new Vue({
 		el: "#app",
 		data: {
-			active: false,
 			submit: {
 				menu_id: '<?= $active ?>',
 				menu_name: '',
@@ -272,10 +212,28 @@
 					}
 				})
 			},
-			mouse_in_out() {
+			mouse_in_out(e) {
 				let _this = this;
-				_this.active = !_this.active;
-				console.log(_this.active);
+				console.log(e.target.classList);
+				e.target.classList.toggle('fadeOut');
+				e.target.classList.toggle('fadeIn');
+			},
+			add_cart(id) {
+				let _this = this;
+				let submit = {
+					product_id: id,
+					qty: 1,
+				}
+				axios({
+					url: '/api/cart_add',
+					method: 'post',
+					responseType: 'json',
+					data: Qs.stringify(submit)
+				}).then(function(data) {
+					if (data.data.sys_code == '200') {
+						console.log(data.data.sys_msg);
+					}
+				})
 			}
 		}
 	})

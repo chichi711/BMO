@@ -47,18 +47,20 @@ class Mod_manager extends CI_Model {
     function do_login($manager_id){
         $arr = $this->get_once($manager_id);
         unset($arr['manager_pwd']);
-        $arr['login_status'] =  TRUE;
+        $arr['admin_login_status'] =  TRUE;
         $this->db->where('manager_id',$manager_id)->update('manager_main',array('last_datetime'=>date("Y-m-d H:i:s")));
         $this->session->set_userdata($arr);
     }
     // 執行登出動作
     function do_logout(){
-        $this->session->sess_destroy();
+        // $this->session->sess_destroy();
+        $this->session->unset_userdata('admin_login_status');
+        $this->session->unset_userdata('manager_id');
         return TRUE;
     }
     // 確認目前登入狀態
     function chk_login_status($login_page = ''){
-        $login_status = $this->session->userdata('login_status');
+        $login_status = $this->session->userdata('admin_login_status');
         // 先判斷有沒有 session
         if($login_status == TRUE){
            return True;

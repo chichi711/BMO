@@ -22,4 +22,19 @@ $config['product_status'][1] = '上架';
 $config['product_status'][2] = '下架';
 $config['product_status'][3] = '無庫存';
 
+
+// 訂單狀態
+$config['order_status'][0] = '待付款';
+$config['order_status'][1] = '待出貨';
+$config['order_status'][2] = '待收貨';
+$config['order_status'][3] = '已完成';
+
+// 寄送方式
+$config['freight_com'][0] = '宅配';
+$config['freight_com'][1] = '7-11';
+$config['freight_com'][2] = '全家';
+
+// 付款方式
+$config['payment'][0] = '貨到付款';
+$config['payment'][1] = '銀行轉帳';
 ?>

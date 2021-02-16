@@ -28,11 +28,7 @@ class Admin extends CI_Controller{
     public function logout()
     {
         $this->mod_manager->do_logout();
-        $view = array(
-            'title' => 'BMO 管理後台',
-            'path'=>'admin/login'
-        );
-        $this->load->view('admin/login', $view);
+        redirect(base_url('./admin'));
     }
     /********************************
      * 
@@ -89,6 +85,29 @@ class Admin extends CI_Controller{
         $view = array(
             'title' => '編輯商品',
             'path'=>'admin/product/set',
+        );
+        $this->load->view('admin/templates/layout',$view);
+    }
+    /********************************
+     * 
+     * order
+     */
+    public function order_list()
+    {
+        $this->mod_manager->chk_login_status();
+        $view = array(
+            'title' => '訂單列表',
+            'path'=>'admin/order/list',
+        );
+        $this->load->view('admin/templates/layout',$view);
+    }
+
+    public function order_set()
+    {
+        $this->mod_manager->chk_login_status();
+        $view = array(
+            'title' => '編輯訂單',
+            'path'=>'admin/order/set',
         );
         $this->load->view('admin/templates/layout',$view);
     }

@@ -7,6 +7,11 @@
 .text_green {
   color: #1ABC9C;
 }
+
+.table td.fit, .table th.fit {
+  white-space: nowrap;
+}
+
 .tab-nav .tab-nav-span {
   display: block;
   padding: 0 15px;

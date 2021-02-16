@@ -61,13 +61,14 @@ class Mod_user extends CI_Model {
         }
         // 執行登出動作
         function do_logout(){
-            $this->session->sess_destroy();
+            $this->session->unset_userdata('login_status');
+            $this->session->unset_userdata('user_id');
+            $this->session->unset_userdata('cart');
             return TRUE;
         }
         // 確認目前登入狀態
         function chk_login_status(){
             $login_status = $this->session->userdata('login_status');
-            // 先判斷有沒有 session
             if($login_status == TRUE){
                return True;
             } else{
@@ -84,9 +85,9 @@ class Mod_user extends CI_Model {
                return $user_id;
             }
             if($login_page != "login"){
-                redirect(base_url('./login'));
+                // redirect(base_url('./login'));
+                return FALSE;
             }
-            return FALSE;
             
         }     
                         

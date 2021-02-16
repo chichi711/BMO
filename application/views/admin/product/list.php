@@ -43,10 +43,10 @@
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
-    <nav aria-label="Page navigation" class="mt-5">
+    <!-- <nav aria-label="Page navigation" class="mt-5">
         <ul class="pagination justify-content-center">
         </ul>
-    </nav>
+    </nav> -->
 
 </div>
 
