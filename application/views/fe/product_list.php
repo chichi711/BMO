@@ -92,6 +92,10 @@
 				</div>
 
 			</div>
+			<nav aria-label="Page navigation" class="mt-5">
+				<ul class="pagination justify-content-center">
+				</ul>
+			</nav>
 		</div>
 	</section><!-- #content end -->
 </div>
@@ -153,12 +157,14 @@
 					_this.sub_list = data.data.data;
 				}
 			})
+			common_func.pageClick(_this.get_product_list);
 			_this.get_product_list();
 
 		},
 		methods: {
-			get_product_list() {
+			get_product_list(needPage) {
 				let _this = this;
+				_this.submit.now_page = needPage;
 				axios({
 					url: '/api/product_list',
 					method: 'post',
@@ -166,7 +172,10 @@
 					data: Qs.stringify(_this.submit)
 				}).then(function(data) {
 					console.log(data)
-					_this.product_list = data.data.data;
+					_this.product_list = data.data.datalist;
+					if (data.data.datalist != '') {
+						common_func.pageGen(data.data.current_page, data.data.total_page)
+					}
 				})
 			},
 			get_url() {

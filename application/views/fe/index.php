@@ -262,7 +262,7 @@
                     data: Qs.stringify(item)
                 }).then(function(data) {
                     console.log(data)
-                    _this.product_list = data.data.data;
+                    _this.product_list = data.data.datalist;
                     if (_this.product_list.length > 4) {
                         _this.product_list = _this.product_list.slice(0, 4);
                     }
@@ -277,7 +277,7 @@
                     data: Qs.stringify(item)
                 }).then(function(data) {
                     console.log(data)
-                    _this.product_list2 = data.data.data;
+                    _this.product_list2 = data.data.datalist;
                     if (_this.product_list2.length > 4) {
                         _this.product_list2 = _this.product_list2.slice(0, 4);
                     }

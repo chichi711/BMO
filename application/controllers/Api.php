@@ -281,7 +281,7 @@ class Api extends CI_Controller
 
     function product_list()
     {
-        $input = array('menu_id', 'main_id', 'sub_id');
+        $input = array('menu_id', 'main_id', 'sub_id','now_page');
         $request = array('menu_id');
         $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
 
@@ -293,18 +293,25 @@ class Api extends CI_Controller
             $this->db->where(array('sub_id' => $data['sub_id']));
         }
 
-        $data = $this->db->get('product')->result_array();
+        $init_data = $this->db->get('product')->result_array();
 
         $datalist = [];
-        foreach ($data as $k => $v) {
+        foreach ($init_data as $k => $v) {
             $datalist[$k] = $v;
             $datalist[$k]['main_name'] = $this->db->where(array('main_id' => $v['main_id']))->get('class_main')->result_array()[0]['main_name'];
             $datalist[$k]['sub_name'] = $this->db->where(array('sub_id' => $v['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
             $datalist[$k]['status'] = $this->config->item('product_status')[$v['status']];
             $datalist[$k]['slide_imgs'] = explode(",", $v['slide_imgs'])[0];
         }
-
-        $this->api_msg->show('200', 'Success', $datalist);
+        // 分頁功能開始
+        if (!isset($data['now_page'])) {
+            $now_page = 1;
+        } else {
+            $now_page = $data['now_page'];
+        }
+        $data = $this->page->pages_data($datalist, 9, $now_page);
+        //分頁功能結束
+        $this->api_msg->show('200', 'Success', $data);
     }
     function product_info()
     {
@@ -637,11 +644,21 @@ class Api extends CI_Controller
 
     function order_list()
     {
-        $datalist = $this->db->order_by('update_datetime','desc')->get('order_main')->result_array();
-        foreach($datalist as  $key => &$val){
+        $input = array('now_page');
+        $request = array();
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+        $init_data = $this->db->order_by('update_datetime','desc')->get('order_main')->result_array();
+        foreach($init_data as  $key => &$val){
             $val['order_status_name'] = $this->config->item('order_status')[$val['order_status']];
         }
-
+        // 分頁功能開始
+        if (!isset($data['now_page'])) {
+            $now_page = 1;
+        } else {
+            $now_page = $data['now_page'];
+        }
+        $datalist = $this->page->pages_data($init_data, 9, $now_page);
+        //分頁功能結束
         $this->api_msg->show('200', 'Success', $datalist);
     }
 

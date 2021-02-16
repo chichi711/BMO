@@ -32,7 +32,10 @@
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
-
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+        </ul>
+    </nav>
 
 </div>
 
@@ -50,6 +53,7 @@
         },
         mounted() {
             let _this = this;
+            common_func.pageClick(_this.get_order_list);
             _this.get_order_list();
         },
         methods: {
@@ -60,7 +64,10 @@
                     method: 'get',
                     responseType: 'json'
                 }).then(function(data) {
-                    _this.order_list = data.data.data;
+                    _this.order_list = data.data.datalist;
+                    if (data.data.datalist != '') {
+                        common_func.pageGen(data.data.current_page, data.data.total_page)
+                    }
                 })
             },
         }

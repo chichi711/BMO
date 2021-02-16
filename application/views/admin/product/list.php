@@ -43,10 +43,10 @@
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
-    <!-- <nav aria-label="Page navigation" class="mt-5">
+    <nav aria-label="Page navigation" class="mt-5">
         <ul class="pagination justify-content-center">
         </ul>
-    </nav> -->
+    </nav>
 
 </div>
 
@@ -58,12 +58,14 @@
                 menu_id: '<?= $_GET['mid'] ?>',
                 main_id: '',
                 sub_id: '',
+                now_page: '',
             },
             product: [],
             menu_list: []
         },
         mounted() {
             let _this = this;
+            common_func.pageClick(_this.product_list);
             _this.product_list();
             axios({
                 url: '/api/menu_class_list',
@@ -74,17 +76,18 @@
             })
         },
         methods: {
-            product_list() {
+            product_list(needPage) {
                 let _this = this;
+                _this.submit.now_page = needPage;
                 axios({
                     url: '/api/product_list',
                     method: 'post',
                     responseType: 'json',
                     data: Qs.stringify(_this.submit)
                 }).then(function(data) {
-                    _this.product = data.data.data;
-                    if (data.data.data != '') {
-                        common_func.pageGen(data.data.data.current_page, data.data.data.total_page)
+                    _this.product = data.data.datalist;
+                    if (data.data.datalist != '') {
+                        common_func.pageGen(data.data.current_page, data.data.total_page)
                     }
                 })
             },

@@ -59,7 +59,8 @@
 										<i class="icon-star3"></i>
 										<i class="icon-star-half-full"></i>
 										<i class="icon-star-empty"></i>
-									</div><!-- Product Single - Rating End -->
+									</div>
+									<!-- Product Single - Rating End -->
 
 								</div>
 
@@ -254,7 +255,7 @@
 				}).then(function(data) {
 					console.log(data)
 					if (data.data.sys_code == '200') {
-						_this.product_list = data.data.data;
+						_this.product_list = data.data.datalist;
 						if (_this.product_list.length > 4) {
 							_this.product_list = _this.product_list.slice(0, 4);
 						}
