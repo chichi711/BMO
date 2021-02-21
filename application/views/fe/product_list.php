@@ -79,7 +79,7 @@
 										<a class="w-75" :href="'/' + submit.menu_id + '?lid=' + item.main_id">{{ item.main_name }}</a>
 										<ul v-if="submit.main_id == item.main_id">
 											<li v-for="order in sub_list">
-												<a :href="'/' + submit.menu_id + '?lid=' + item.main_id + '.' + order.sub_id">{{ order.sub_name }}</a>
+												<a :href="'/' + submit.menu_id + '?lid=' + item.main_id + '_' + order.sub_id">{{ order.sub_name }}</a>
 											</li>
 										</ul>
 									</li>
@@ -183,7 +183,7 @@
 				let searchParams = new URLSearchParams(window.location.search);
 				if (searchParams.has('lid')) {
 					let lid = searchParams.get('lid');
-					lid = lid.split('.');
+					lid = lid.split('_');
 					if (typeof lid[1] == 'undefined') {
 						// 如果只有大分類
 						_this.submit.main_id = lid[0];
@@ -223,7 +223,7 @@
 			},
 			mouse_in_out(e) {
 				let _this = this;
-				console.log(e.target.classList);
+				// console.log(e.target.classList);
 				e.target.classList.toggle('fadeOut');
 				e.target.classList.toggle('fadeIn');
 			},

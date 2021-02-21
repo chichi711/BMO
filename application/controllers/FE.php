@@ -67,6 +67,18 @@ class FE extends CI_Controller{
         );
         $this->load->view('fe/templates/layout',$data);
     }
+    
+    public function search($id = '')
+    {
+        // hub
+        $data = array(
+            'title' => '商品',
+            'path'=>'fe/search_list',
+            "active"=>'search',
+            "id"=>$id,
+        );
+        $this->load->view('fe/templates/layout',$data);
+    }
     // 登入登出
     public function login()
     {

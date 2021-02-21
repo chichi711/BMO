@@ -279,6 +279,32 @@ class Api extends CI_Controller
         $this->api_msg->show('200', 'Success', $data);
     }
 
+    function product_search()
+    {
+        $input = array('search','now_page');
+        $request = array('search');
+        $data = $this->mod_apicheck->chk_get_post_requred($input, $request);
+
+        $init_data = $this->db->like('product_name', $data['search'])->get('product')->result_array();
+
+        $datalist = [];
+        foreach ($init_data as $k => $v) {
+            $datalist[$k] = $v;
+            $datalist[$k]['main_name'] = $this->db->where(array('main_id' => $v['main_id']))->get('class_main')->result_array()[0]['main_name'];
+            $datalist[$k]['sub_name'] = $this->db->where(array('sub_id' => $v['sub_id']))->get('class_sub')->result_array()[0]['sub_name'];
+            $datalist[$k]['status'] = $this->config->item('product_status')[$v['status']];
+            $datalist[$k]['slide_imgs'] = explode(",", $v['slide_imgs'])[0];
+        }
+        // 分頁功能開始
+        if (!isset($data['now_page'])) {
+            $now_page = 1;
+        } else {
+            $now_page = $data['now_page'];
+        }
+        $data = $this->page->pages_data($datalist, 12, $now_page);
+        //分頁功能結束
+        $this->api_msg->show('200', 'Success', $data);
+    }
     function product_list()
     {
         $input = array('menu_id', 'main_id', 'sub_id','now_page');

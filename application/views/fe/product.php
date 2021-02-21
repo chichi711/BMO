@@ -173,7 +173,7 @@
 								</div>
 								<div class="product-desc center">
 									<div class="product-title">
-										<h3><a :href="'./product/' + item.product_id">{{ item.product_name }}</a></h3>
+										<h3><a :href="'/product/' + item.product_id">{{ item.product_name }}</a></h3>
 									</div>
 									<div>{{ item.author }} 著</div>
 									<div class="product-price">${{ item.price }}</div>
@@ -264,7 +264,6 @@
 			},
 			mouse_in_out(e) {
 				let _this = this;
-				console.log(e.target.classList);
 				e.target.classList.toggle('fadeOut');
 				e.target.classList.toggle('fadeIn');
 			},

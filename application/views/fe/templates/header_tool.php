@@ -39,7 +39,7 @@
 							<!-- Top Search
 							============================================= -->
 							<div id="top-search" class="header-misc-icon">
-								<a href="#" id="top-search-trigger"><i class="icon-line-search"></i><i class="icon-line-cross"></i></a>
+								<a href="#" id="top-search-trigger"><i class="icon-line-search"></i><i @click.prevent="keyword = '' " class="icon-line-cross"></i></a>
 							</div><!-- #top-search end -->
 
 							<!-- Top Cart
@@ -118,7 +118,7 @@
 															<div>{{ item.main_name }}</div>
 														</a>
 														<ul v-if="item.sublist" class="sub-menu-container">
-															<li v-for="order in item.sublist" class="menu-item"><a class="menu-link" :href="'/' + list.menu_id + '?lid=' + item.main_id + '.' + order.sub_id">
+															<li v-for="order in item.sublist" class="menu-item"><a class="menu-link" :href="'/' + list.menu_id + '?lid=' + item.main_id + '_' + order.sub_id">
 																	<div>{{ order.sub_name }}</div>
 																</a></li>
 															<li class="menu-item text-gray"><a class="menu-link" :href="'/' + list.menu_id + '?lid=' + item.main_id">
@@ -143,8 +143,8 @@
 
 						</nav><!-- #primary-menu end -->
 
-						<form class="top-search-form" action="search.html" method="get">
-							<input type="text" name="q" class="form-control" value="" placeholder="Type &amp; Hit Enter.." autocomplete="off">
+						<form class="top-search-form">
+							<input type="text" class="form-control" v-model="keyword" placeholder="請輸入關鍵字" @keypress.enter.prevent="search" autocomplete="off">
 						</form>
 
 					</div>
@@ -157,6 +157,7 @@
 			new Vue({
 				el: '#header',
 				data: {
+					keyword: '',
 					login: '',
 					menu: [],
 					cart_list: [],
@@ -185,6 +186,12 @@
 					})
 				},
 				methods: {
+					search() {
+						let _this = this;
+						if (_this.keyword) {
+							location.href = './search?q=' + _this.keyword;
+						}
+					},
 					get_shopping_cart() {
 						let _this = this;
 						if (_this.login) {

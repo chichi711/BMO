@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 <head>
-
+	<!-- <base href="<?= base_url() ?>"> -->
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="author" content="SemiColonWeb" />
     <link rel="icon" type="image/png" sizes="32x32" href="/public/admin_assets/img/BmoLogo.png">
