@@ -127,19 +127,19 @@
 
 							<div class="col-12 mt-5">
 
-								<div class="tabs clearfix mb-0" id="tab-1">
+								<div class="tabs tabs-alt tabs-tb clearfix" id="tab-8">
 
 									<ul class="tab-nav clearfix">
-										<li><a href="#tabs-1"><i class="icon-align-justify2"></i><span class="d-none d-md-inline-block"> 內容簡介</span></a></li>
-										<li><a href="#tabs-2"><i class="icon-info-sign"></i><span class="d-none d-md-inline-block"> 作者介紹</span></a></li>
-										<li><a href="#tabs-3"><i class="icon-star3"></i><span class="d-none d-md-inline-block"> 目錄</span></a></li>
+										<li><a href="./product/<?= $id ?>#tabs-29"><i class="icon-align-justify2"></i><span class="d-none d-md-inline-block"> 內容簡介</span></a></li>
+										<li><a href="./product/<?= $id ?>#tabs-30"><i class="icon-info-sign"></i><span class="d-none d-md-inline-block"> 作者介紹</span></a></li>
+										<li><a href="./product/<?= $id ?>#tabs-31"><i class="icon-star3"></i><span class="d-none d-md-inline-block"> 目錄</span></a></li>
 									</ul>
 
 									<div class="tab-container">
 
-										<div class="tab-content clearfix" id="tabs-1" v-html="product.info"></div>
-										<div class="tab-content clearfix" id="tabs-2" v-html="product.about_author"></div>
-										<div class="tab-content clearfix" id="tabs-3" v-html="product.catalog"></div>
+										<div class="tab-content clearfix" id="tabs-29" v-html="product.info"></div>
+										<div class="tab-content clearfix" id="tabs-30" v-html="product.about_author"></div>
+										<div class="tab-content clearfix" id="tabs-31" v-html="product.catalog"></div>
 
 									</div>
 

@@ -30,8 +30,8 @@
 						<!-- Logo
 						============================================= -->
 						<div id="logo">
-							<a href="/" class="standard-logo" data-dark-logo="/public/assets/images/logo-dark.png"><img src="/public/assets/images/Bmo-logo-black.png" alt="BMO Logo"></a>
-							<a href="/" class="retina-logo" data-dark-logo="/public/assets/images/logo-dark@2x.png"><img src="/public/assets/images/Bmo-logo-black@2x.png" alt="BMO Logo"></a>
+							<a href="./" class="standard-logo" data-dark-logo="./public/assets/images/logo-dark.png"><img src="./public/assets/images/Bmo-logo-black.png" alt="BMO Logo"></a>
+							<a href="./" class="retina-logo" data-dark-logo="./public/assets/images/logo-dark@2x.png"><img src="./public/assets/images/Bmo-logo-black@2x.png" alt="BMO Logo"></a>
 						</div><!-- #logo end -->
 
 						<div class="header-misc">
@@ -66,7 +66,7 @@
 									</div>
 									<div class="top-cart-action">
 										<!-- <span class="top-checkout-price">$114.95</span> -->
-										<a href="/cart_list" class="button button-3d button-small m-0">完整清單</a>
+										<a href="./cart_list" class="button button-3d button-small m-0">完整清單</a>
 									</div>
 								</div>
 							</div><!-- #top-cart end -->
@@ -74,18 +74,18 @@
 							<!-- Top login
 							============================================= -->
 							<!-- <div v-if="login" id="top-login" class="header-misc-icon">
-								<a href="/logout"><i class="icon-signout"></i></a>
+								<a href="./logout"><i class="icon-signout"></i></a>
 							</div> -->
 							<div v-if="login" id="top-login" class="dropdown header-misc-icon">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="icon-user1"></i></a>
 								<ul class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenu1">
-									<!-- <a class="dropdown-item text-left" href="/profile">個人資料</a> -->
-									<a class="dropdown-item text-left" href="/logout">登出 <i class="icon-signout"></i></a>
+									<!-- <a class="dropdown-item text-left" href="./profile">個人資料</a> -->
+									<a class="dropdown-item text-left" href="./logout">登出 <i class="icon-signout"></i></a>
 								</ul>
 							</div>
 
 							<div v-else id="top-login" class="header-misc-icon">
-								<a href="/login"><i class="icon-user1"></i></a>
+								<a href="./login"><i class="icon-user1"></i></a>
 							</div>
 
 							<!-- #top-login end -->

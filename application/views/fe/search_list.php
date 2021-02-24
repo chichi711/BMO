@@ -37,7 +37,7 @@
 										<div class="bg-overlay">
 											<div class="bg-overlay-content align-items-end justify-content-between animated fadeOut" @mouseleave="mouse_in_out($event)" @mouseenter="mouse_in_out($event)" data-hover-animate="fadeIn" data-hover-speed="400">
 												<a href="#" class="btn btn-dark mr-2" @click="add_cart(item.product_id)"><i class="icon-shopping-cart"></i></a>
-												<!-- <a href="/public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a> -->
+												<!-- <a href="./public/assets/include/ajax/shop-item.html" class="btn btn-dark" data-lightbox="ajax"><i class="icon-line-expand"></i></a> -->
 											</div>
 											<div class="bg-overlay-bg bg-transparent"></div>
 										</div>

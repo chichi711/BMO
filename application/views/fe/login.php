@@ -21,8 +21,8 @@
                 <div class="tabs mx-auto mb-0 clearfix" id="tab-login-register" style="max-width: 500px;">
 
                     <ul class="tab-nav tab-nav2 center clearfix">
-                        <li class="inline-block"><a href="#tab-login">登入</a></li>
-                        <li class="inline-block"><a href="#tab-register">註冊</a></li>
+                        <li class="inline-block"><a href="/login#tab-login">登入</a></li>
+                        <li class="inline-block"><a href="/login#tab-register">註冊</a></li>
                     </ul>
 
                     <div class="tab-container">

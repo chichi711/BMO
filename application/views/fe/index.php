@@ -45,22 +45,22 @@
 
                         <div class="row align-items-stretch gutter-20 h-100">
                             <div class="col-md-6 min-vh-25 min-vh-md-0">
-                                <a href="/product/P-1613123768" class="grid-inner d-block h-100" style="background-image: url('./public/assets/images/banners/2.jpg');"></a>
+                                <a href="./product/P-1613123768" class="grid-inner d-block h-100" style="background-image: url('./public/assets/images/banners/2.jpg');"></a>
                             </div>
 
                             <div class="col-md-6 min-vh-25 min-vh-md-0">
-                                <a href="/product/P-1613122900" class="grid-inner d-block h-100" style="background-image: url('./public/assets/images/banners/1.jpg'); background-position: right center;"></a>
+                                <a href="./product/P-1613122900" class="grid-inner d-block h-100" style="background-image: url('./public/assets/images/banners/1.jpg'); background-position: right center;"></a>
                             </div>
 
                             <div class="col-md-12 min-vh-25 min-vh-md-0 pb-md-0">
-                                <a href="/product/P-1613125772" class="grid-inner d-block h-100" style="background-image: url('./public/assets/images/banners/4.jpg');"></a>
+                                <a href="./product/P-1613125772" class="grid-inner d-block h-100" style="background-image: url('./public/assets/images/banners/4.jpg');"></a>
                             </div>
                         </div>
 
                     </div>
 
                     <div class="col-md-4 min-vh-50">
-                        <a href="/product/P-1613125916" class="grid-inner d-block h-100" style="background-image: url('./public/assets/images/banners/3.jpg'); background-position: center top;"></a>
+                        <a href="./product/P-1613125916" class="grid-inner d-block h-100" style="background-image: url('./public/assets/images/banners/3.jpg'); background-position: center top;"></a>
                     </div>
                 </div>
 
